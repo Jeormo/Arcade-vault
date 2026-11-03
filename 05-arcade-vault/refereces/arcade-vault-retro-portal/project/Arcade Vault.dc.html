@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#0a0a0f;color:#d8f6ff;font-family:'Courier Prime',ui-monospace,monospace}
+a{color:#00f5ff;text-decoration:none}a:hover{color:#f5ff00}
+input::placeholder{color:#5f6f80}
+button{font-family:inherit}
+:focus-visible{outline:2px solid #f5ff00;outline-offset:3px}
+@keyframes av-flicker{0%,19%,21%,23%,55%,57%,100%{opacity:1;text-shadow:0 0 6px #00f5ff,0 0 18px #00f5ff,0 0 42px #00f5ff,3px 3px 0 #ff006e}20%,22%,56%{opacity:.55;text-shadow:none}}
+@keyframes av-grid{from{background-position:0 0}to{background-position:0 48px}}
+@keyframes av-pulse{0%,100%{box-shadow:0 0 10px #f5ff00,0 0 26px #f5ff0066,inset 0 0 10px #f5ff0044}50%{box-shadow:0 0 22px #f5ff00,0 0 56px #f5ff0099,inset 0 0 18px #f5ff0066}}
+@keyframes av-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes av-fade{from{opacity:0}to{opacity:1}}
+@keyframes av-row{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes av-blink{50%{opacity:0}}
+@keyframes av-slide{from{transform:translateX(100%)}to{transform:none}}
+@keyframes av-spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+@keyframes av-wipe{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+</style>
+</helmet>
+
+<div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 50% 58%,#ff006e22,transparent 55%),#0a0a0f">
+  <div style="position:absolute;left:-50%;right:-50%;top:58%;height:80%;transform:perspective(420px) rotateX(62deg);transform-origin:top center;background-image:linear-gradient(#00f5ff44 1px,transparent 1px),linear-gradient(90deg,#ff006e33 1px,transparent 1px);background-size:48px 48px;animation:{{ gridAnim }};-webkit-mask-image:linear-gradient(to bottom,transparent,#000 30%,#000)"></div>
+  <div style="position:absolute;left:0;right:0;top:58%;height:2px;background:#ff006e;box-shadow:0 0 18px #ff006e,0 0 40px #ff006e"></div>
+</div>
+<sc-if value="{{ scanlines }}" hint-placeholder-val="{{ true }}">
+  <div style="position:fixed;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(0deg,#00000055 0 1px,transparent 1px 3px);mix-blend-mode:multiply"></div>
+</sc-if>
+
+<div style="position:relative;z-index:1;min-height:100vh">
+
+<sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+  <nav style="position:sticky;top:0;z-index:50;background:#0a0a0fe6;backdrop-filter:blur(8px);border-bottom:1px solid #00f5ff44;box-shadow:0 4px 24px #00f5ff14">
+    <div style="max-width:1280px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:28px">
+      <button onClick="{{ goLibrary }}" style="background:none;border:0;cursor:pointer;padding:0;font-family:'Press Start 2P',monospace;font-size:14px;color:#00f5ff;text-shadow:0 0 8px #00f5ff,2px 2px 0 #ff006e;letter-spacing:1px">ARCADE VAULT</button>
+      <sc-if value="{{ desktop }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;gap:24px;flex:1">
+          <button onClick="{{ goLibrary }}" style="background:none;border:0;cursor:pointer;padding:6px 0;font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;letter-spacing:1px;color:{{ libColor }};border-bottom:2px solid {{ libLine }};box-shadow:{{ libGlow }}" style-hover="color:#f5ff00">Biblioteca</button>
+          <button onClick="{{ goFame }}" style="background:none;border:0;cursor:pointer;padding:6px 0;font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;letter-spacing:1px;color:{{ fameColor }};border-bottom:2px solid {{ fameLine }};box-shadow:{{ fameGlow }}" style-hover="color:#f5ff00">Salón de la Fama</button>
+        </div>
+        <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ goAuth }}" style="cursor:pointer;background:transparent;border:2px solid #ff006e;color:#ff006e;padding:10px 14px;font-family:'Press Start 2P',monospace;font-size:10px;box-shadow:0 0 10px #ff006e55" style-hover="background:#ff006e;color:#0a0a0f;box-shadow:0 0 20px #ff006e" style-active="transform:scale(.95) translateY(2px)">Iniciar Sesión</button>
+        </sc-if>
+        <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:36px;height:36px;display:grid;place-items:center;border:2px solid #f5ff00;color:#f5ff00;font-family:'Press Start 2P',monospace;font-size:11px;box-shadow:0 0 10px #f5ff0066">{{ initials }}</div>
+            <span style="font-weight:700;color:#d8f6ff">{{ userName }}</span>
+            <button onClick="{{ logout }}" style="cursor:pointer;background:none;border:1px solid #5f6f80;color:#9fb3c4;padding:6px 10px;font-size:13px" style-hover="border-color:#ff006e;color:#ff006e">Salir</button>
+          </div>
+        </sc-if>
+      </sc-if>
+      <sc-if value="{{ mobile }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1"></div>
+        <button onClick="{{ toggleMenu }}" aria-label="Abrir menú" style="cursor:pointer;width:44px;height:44px;background:transparent;border:2px solid #00f5ff;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;box-shadow:0 0 10px #00f5ff55" style-active="transform:scale(.94)">
+          <span style="width:20px;height:3px;background:#00f5ff"></span><span style="width:20px;height:3px;background:#00f5ff"></span><span style="width:20px;height:3px;background:#00f5ff"></span>
+        </button>
+      </sc-if>
+    </div>
+  </nav>
+</sc-if>
+
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ toggleMenu }}" style="position:fixed;inset:0;z-index:70;background:#0a0a0fcc;animation:av-fade .2s"></div>
+  <aside style="position:fixed;top:0;right:0;bottom:0;width:min(300px,82vw);z-index:71;background:#0e0e16;border-left:2px solid #ff006e;box-shadow:-10px 0 40px #ff006e33;padding:24px;display:flex;flex-direction:column;gap:18px;animation:av-slide .25s ease-out">
+    <button onClick="{{ toggleMenu }}" style="align-self:flex-end;cursor:pointer;background:none;border:0;color:#ff006e;font-family:'Press Start 2P',monospace;font-size:14px;padding:10px">X</button>
+    <button onClick="{{ goLibrary }}" style="text-align:left;cursor:pointer;background:none;border:0;border-left:3px solid {{ libLine }};padding:12px 14px;color:{{ libColor }};font-weight:700;font-size:18px">Biblioteca</button>
+    <button onClick="{{ goFame }}" style="text-align:left;cursor:pointer;background:none;border:0;border-left:3px solid {{ fameLine }};padding:12px 14px;color:{{ fameColor }};font-weight:700;font-size:18px">Salón de la Fama</button>
+    <div style="flex:1"></div>
+    <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ goAuth }}" style="cursor:pointer;background:transparent;border:2px solid #ff006e;color:#ff006e;padding:14px;font-family:'Press Start 2P',monospace;font-size:10px">Iniciar Sesión</button>
+    </sc-if>
+    <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:40px;height:40px;display:grid;place-items:center;border:2px solid #f5ff00;color:#f5ff00;font-family:'Press Start 2P',monospace;font-size:11px">{{ initials }}</div>
+        <span style="font-weight:700;flex:1">{{ userName }}</span>
+        <button onClick="{{ logout }}" style="cursor:pointer;background:none;border:1px solid #5f6f80;color:#9fb3c4;padding:10px 12px">Salir</button>
+      </div>
+    </sc-if>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ isLibrary }}" hint-placeholder-val="{{ true }}">
+  <main style="max-width:1280px;margin:0 auto;padding:56px 20px 96px;animation:av-enter .35s ease-out">
+    <header style="display:flex;flex-direction:column;gap:18px;margin-bottom:44px">
+      <h1 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(28px,6.4vw,72px);line-height:1.15;color:#e8feff;animation:av-flicker 4.5s infinite">ARCADE VAULT</h1>
+      <p style="margin:0;font-family:'Press Start 2P',monospace;font-size:clamp(10px,1.4vw,14px);color:#f5ff00;text-shadow:0 0 8px #f5ff0099;animation:av-blink 1.2s steps(1) infinite">INSERTA UNA MONEDA PARA JUGAR</p>
+    </header>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:32px">
+      <div style="flex:1 1 280px;max-width:440px;display:flex;align-items:center;gap:10px;border:2px solid #00f5ff88;background:#0a0a0fcc;padding:0 14px;box-shadow:0 0 12px #00f5ff22" style-focus-within="border-color:#00f5ff">
+        <span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#00f5ff">&gt;</span>
+        <input value="{{ query }}" onInput="{{ setQuery }}" placeholder="Buscar juego por nombre o categoría…" style="flex:1;min-width:0;height:46px;background:transparent;border:0;outline:none;color:#e8feff;font-family:'Courier Prime',monospace;font-size:16px">
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
+          <button onClick="{{ c.select }}" style="cursor:pointer;padding:10px 12px;font-family:'Courier Prime',monospace;font-weight:700;font-size:14px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}" style-hover="border-color:#f5ff00" style-active="transform:scale(.95)">{{ c.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:48px 0;display:flex;flex-direction:column;gap:12px">
+        <p style="margin:0;font-family:'Press Start 2P',monospace;font-size:14px;color:#ff006e">SIN RESULTADOS</p>
+        <p style="margin:0;color:#9fb3c4">Ningún cartucho coincide con «{{ query }}». Prueba con otro nombre.</p>
+      </div>
+    </sc-if>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px">
+      <sc-for list="{{ games }}" as="g" hint-placeholder-count="6">
+        <article onClick="{{ g.open }}" style="cursor:pointer;display:flex;flex-direction:column;background:linear-gradient(180deg,#13131e,#0c0c14);border:2px solid {{ g.colorDim }};box-shadow:0 0 14px {{ g.colorFaint }};transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;transform-style:preserve-3d" style-hover="transform:perspective(900px) translateY(-8px) scale(1.03) rotateX(5deg) rotateY(-4deg);border-color:{{ g.color }};box-shadow:0 0 22px {{ g.color }},0 0 60px {{ g.colorFaint }},inset 0 0 16px {{ g.colorFaint }}">
+          <div style="position:relative;aspect-ratio:16/10;overflow:hidden;background:{{ g.thumbBg }};border-bottom:2px solid {{ g.colorDim }}">
+            <div style="position:absolute;left:0;right:0;bottom:22%;height:2px;background:{{ g.color }};box-shadow:0 0 12px {{ g.color }}"></div>
+            <div style="position:absolute;inset:0;display:grid;place-items:center;font-family:'Press Start 2P',monospace;font-size:clamp(34px,4vw,48px);color:{{ g.color }};text-shadow:0 0 14px {{ g.color }},4px 4px 0 {{ g.shadowColor }}">{{ g.glyph }}</div>
+            <span style="position:absolute;top:10px;left:10px;font-family:'Press Start 2P',monospace;font-size:8px;padding:6px 8px;background:#0a0a0fcc;color:{{ g.color }};border:1px solid {{ g.colorDim }}">{{ g.cat }}</span>
+            <span style="position:absolute;top:10px;right:10px;font-family:'Press Start 2P',monospace;font-size:8px;color:#9fb3c4">{{ g.num }}</span>
+          </div>
+          <div style="padding:18px;display:flex;flex-direction:column;gap:12px;flex:1">
+            <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:15px;color:#e8feff;line-height:1.4">{{ g.title }}</h2>
+            <p style="margin:0;color:#a9bccc;font-size:15px;line-height:1.4;text-wrap:pretty;flex:1">{{ g.desc }}</p>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <span style="font-size:11px;letter-spacing:1px;color:#7f93a5;font-weight:700">MEJOR PUNTUACIÓN</span>
+                <span style="font-family:'Press Start 2P',monospace;font-size:11px;color:#f5ff00;text-shadow:0 0 6px #f5ff0088">{{ g.best }}</span>
+              </div>
+              <button onClick="{{ g.play }}" style="cursor:pointer;background:transparent;border:2px solid {{ g.color }};color:{{ g.color }};padding:10px 14px;font-family:'Press Start 2P',monospace;font-size:10px;transition:all .15s" style-hover="background:{{ g.color }};color:#0a0a0f;box-shadow:0 0 18px {{ g.color }}" style-active="transform:scale(.92) translateY(2px)">JUGAR</button>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </main>
+</sc-if>
+
+<sc-if value="{{ hasDetail }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:60;background:#0a0a0ff0;backdrop-filter:blur(6px);overflow-y:auto;animation:av-fade .2s">
+    <div style="max-width:1180px;margin:0 auto;padding:32px 20px 64px;display:flex;flex-direction:column;gap:32px;animation:av-enter .3s ease-out">
+      <button onClick="{{ closeDetail }}" style="align-self:flex-start;cursor:pointer;background:transparent;border:2px solid #00f5ff;color:#00f5ff;padding:12px 14px;font-family:'Press Start 2P',monospace;font-size:10px" style-hover="background:#00f5ff;color:#0a0a0f" style-active="transform:scale(.95) translateY(2px)">&lt; VOLVER AL VAULT</button>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:40px;align-items:start">
+        <section style="display:flex;flex-direction:column;gap:22px">
+          <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:{{ d.color }}">{{ d.num }} · {{ d.cat }}</span>
+          <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(28px,5vw,56px);line-height:1.15;color:#f2feff;text-shadow:0 0 10px {{ d.color }},0 0 30px {{ d.color }},4px 4px 0 {{ d.shadowColor }}">{{ d.title }}</h2>
+          <div style="aspect-ratio:16/8;background:{{ d.thumbBg }};border:2px solid {{ d.color }};box-shadow:0 0 24px {{ d.colorFaint }};display:grid;place-items:center;font-family:'Press Start 2P',monospace;font-size:56px;color:{{ d.color }};text-shadow:0 0 18px {{ d.color }}">{{ d.glyph }}</div>
+          <p style="margin:0;font-size:18px;line-height:1.55;color:#c4d6e3;max-width:60ch;text-wrap:pretty">{{ d.long }}</p>
+          <p style="margin:0;font-size:15px;color:#8aa0b2"><span style="color:#f5ff00;font-weight:700">CONTROLES:</span> {{ d.controls }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:6px">
+            <button onClick="{{ d.play }}" style="cursor:pointer;background:#f5ff0010;border:3px solid #f5ff00;color:#f5ff00;padding:20px 28px;font-family:'Press Start 2P',monospace;font-size:16px;animation:av-pulse 1.6s ease-in-out infinite" style-hover="background:#f5ff00;color:#0a0a0f" style-active="transform:scale(.95) translateY(3px)">JUGAR AHORA</button>
+            <span style="color:#7f93a5;font-size:14px">{{ playingAsLabel }}</span>
+          </div>
+        </section>
+        <aside style="background:#0e0e17;border:2px solid #ff006e88;box-shadow:0 0 20px #ff006e22;padding:22px;display:flex;flex-direction:column;gap:14px">
+          <h3 style="margin:0 0 6px;font-family:'Press Start 2P',monospace;font-weight:400;font-size:12px;color:#ff006e;text-shadow:0 0 8px #ff006e">MEJORES PUNTUACIONES</h3>
+          <sc-for list="{{ detailRows }}" as="r" hint-placeholder-count="10">
+            <div style="display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dashed #ffffff14;animation:av-row .4s both;animation-delay:{{ r.delay }}">
+              <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:{{ r.rankColor }}">{{ r.rank }}</span>
+              <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:700;color:{{ r.nameColor }};overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="font-size:12px;color:#6f8396">{{ r.date }}</span></span>
+              <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#e8feff">{{ r.score }}</span>
+            </div>
+          </sc-for>
+        </aside>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isPlayer }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1000px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:18px;animation:av-fade .3s">
+    <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;padding:12px 16px;border:2px solid #00f5ff55;background:#0a0a0fdd">
+      <span style="font-family:'Press Start 2P',monospace;font-size:11px;color:{{ p.color }};text-shadow:0 0 8px {{ p.color }}">{{ p.title }}</span>
+      <div style="display:flex;flex-wrap:wrap;gap:20px;flex:1">
+        <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;color:#7f93a5;letter-spacing:1px">PUNTUACIÓN</span><span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#f5ff00">{{ hudScore }}</span></span>
+        <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;color:#7f93a5;letter-spacing:1px">VIDAS</span><span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#ff006e">{{ hudLives }}</span></span>
+        <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;color:#7f93a5;letter-spacing:1px">NIVEL</span><span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#00f5ff">{{ hudLevel }}</span></span>
+        <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:700;color:#7f93a5;letter-spacing:1px">JUGADOR</span><span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#e8feff">{{ playerName }}</span></span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{ togglePause }}" style="cursor:pointer;background:transparent;border:2px solid #f5ff00;color:#f5ff00;padding:10px 12px;font-family:'Press Start 2P',monospace;font-size:9px" style-hover="background:#f5ff00;color:#0a0a0f" style-active="transform:scale(.93) translateY(2px)">{{ pauseLabel }}</button>
+        <button onClick="{{ exitGame }}" style="cursor:pointer;background:transparent;border:2px solid #ff006e;color:#ff006e;padding:10px 12px;font-family:'Press Start 2P',monospace;font-size:9px" style-hover="background:#ff006e;color:#0a0a0f" style-active="transform:scale(.93) translateY(2px)">SALIR</button>
+      </div>
+    </div>
+
+    <div style="padding:clamp(14px,3vw,34px);border-radius:34px;background:linear-gradient(160deg,#26262f,#121218 55%,#0b0b10);box-shadow:0 30px 80px #000c,inset 0 2px 0 #ffffff14,inset 0 -6px 18px #0009,0 0 0 2px #1d1d26">
+      <div style="position:relative;border-radius:22px / 26px;overflow:hidden;background:#05050a;box-shadow:inset 0 0 50px #000,0 0 30px {{ p.colorFaint }};aspect-ratio:4/3">
+        <sc-if value="{{ p.playable }}" hint-placeholder-val="{{ true }}">
+          <canvas ref="{{ canvasRef }}" width="480" height="360" onMouseMove="{{ onPointer }}" onTouchMove="{{ onTouchMove }}" onTouchStart="{{ onTouchStart }}" onTouchEnd="{{ onTouchEnd }}" onClick="{{ onCanvasClick }}" style="display:block;width:100%;height:100%;image-rendering:pixelated;touch-action:none;filter:saturate(1.15) contrast(1.05)"></canvas>
+        </sc-if>
+        <sc-if value="{{ p.external }}" hint-placeholder-val="{{ false }}">
+          <iframe title="Juego" sandbox="allow-scripts" srcdoc="{{ externalDoc }}" style="display:block;width:100%;height:100%;border:0;background:#05050a"></iframe>
+          <button onClick="{{ simulateEnd }}" style="position:absolute;bottom:16px;right:16px;cursor:pointer;background:#0a0a0fcc;border:2px solid #ff006e;color:#ff006e;padding:10px 12px;font-family:'Press Start 2P',monospace;font-size:8px" style-hover="background:#ff006e;color:#0a0a0f">SIMULAR FIN DE PARTIDA</button>
+        </sc-if>
+        <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 58%,#0008 100%),repeating-linear-gradient(0deg,#0000004d 0 1px,transparent 1px 3px)"></div>
+        <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,#ffffff10,transparent 35%)"></div>
+        <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:#05050a;overflow:hidden">
+            <div style="position:absolute;left:0;right:0;height:30%;background:linear-gradient(transparent,#00f5ff33,transparent);animation:av-wipe 1s linear infinite"></div>
+            <div style="width:40px;height:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;animation:av-spin 1s steps(8) infinite">
+              <span style="background:#00f5ff"></span><span style="background:#00f5ff88"></span><span style="background:#00f5ff44"></span><span style="background:#ff006e"></span><span></span><span style="background:#00f5ff22"></span><span style="background:#ff006e88"></span><span style="background:#f5ff00"></span><span style="background:#f5ff0088"></span>
+            </div>
+            <span style="font-family:'Press Start 2P',monospace;font-size:11px;color:#00f5ff">CARGANDO CARTUCHO…</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#05050acc">
+            <span style="font-family:'Press Start 2P',monospace;font-size:28px;color:#f5ff00;text-shadow:0 0 14px #f5ff00;animation:av-blink 1s steps(1) infinite">PAUSA</span>
+            <span style="color:#9fb3c4">Pulsa P o el botón CONTINUAR</span>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:0 6px;gap:12px;flex-wrap:wrap">
+        <span style="font-family:'Press Start 2P',monospace;font-size:8px;color:#5f6f80">ARCADE VAULT · CRT-84</span>
+        <span style="font-size:13px;color:#7f93a5">{{ p.controls }}</span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#39ff88;box-shadow:0 0 10px #39ff88"></span>
+      </div>
+    </div>
+  </main>
+</sc-if>
+
+<sc-if value="{{ over }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;background:#0a0a0fe6;display:grid;place-items:center;padding:20px;animation:av-fade .25s">
+    <div style="width:min(460px,100%);background:#0e0e17;border:3px solid #ff006e;box-shadow:0 0 30px #ff006e88,inset 0 0 20px #ff006e33;padding:32px 26px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;animation:av-enter .3s">
+      <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(20px,5vw,28px);color:#ff006e;text-shadow:0 0 12px #ff006e">FIN DEL JUEGO</h2>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:1px;color:#7f93a5">PUNTUACIÓN FINAL</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:30px;color:#f5ff00;text-shadow:0 0 14px #f5ff00">{{ finalScore }}</span>
+      </div>
+      <sc-if value="{{ canSave }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ saveScore }}" style="cursor:pointer;width:100%;background:transparent;border:2px solid #f5ff00;color:#f5ff00;padding:16px;font-family:'Press Start 2P',monospace;font-size:11px;box-shadow:0 0 12px #f5ff0066" style-hover="background:#f5ff00;color:#0a0a0f" style-active="transform:scale(.96) translateY(2px)">GUARDAR PUNTUACIÓN</button>
+        <span style="font-size:13px;color:#7f93a5">{{ saveNote }}</span>
+      </sc-if>
+      <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}">
+        <span style="min-height:20px;font-family:'Press Start 2P',monospace;font-size:12px;color:#39ff88;text-shadow:0 0 10px #39ff88">{{ typed }}<span style="animation:av-blink .6s steps(1) infinite">_</span></span>
+      </sc-if>
+      <div style="display:flex;gap:12px;width:100%;flex-wrap:wrap">
+        <button onClick="{{ replay }}" style="flex:1 1 150px;cursor:pointer;background:transparent;border:2px solid #00f5ff;color:#00f5ff;padding:14px 10px;font-family:'Press Start 2P',monospace;font-size:9px" style-hover="background:#00f5ff;color:#0a0a0f" style-active="transform:scale(.95) translateY(2px)">JUGAR DE NUEVO</button>
+        <button onClick="{{ exitGame }}" style="flex:1 1 150px;cursor:pointer;background:transparent;border:2px solid #ff006e;color:#ff006e;padding:14px 10px;font-family:'Press Start 2P',monospace;font-size:9px" style-hover="background:#ff006e;color:#0a0a0f" style-active="transform:scale(.95) translateY(2px)">VOLVER AL VAULT</button>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+  <main style="min-height:calc(100vh - 70px);display:grid;place-items:center;padding:40px 16px;animation:av-enter .35s ease-out">
+    <div style="width:min(430px,100%);background:#0d0d16f2;border:2px solid #00f5ff88;box-shadow:0 0 30px #00f5ff33,inset 0 0 24px #00f5ff11;padding:32px 26px;display:flex;flex-direction:column;gap:22px">
+      <div style="font-family:'Press Start 2P',monospace;font-size:20px;color:#e8feff;text-align:center;animation:av-flicker 5s infinite">ARCADE VAULT</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;border:2px solid #ff006e">
+        <button onClick="{{ tabLogin }}" style="cursor:pointer;padding:14px 6px;border:0;font-family:'Press Start 2P',monospace;font-size:9px;background:{{ loginTabBg }};color:{{ loginTabColor }}">INICIAR SESIÓN</button>
+        <button onClick="{{ tabRegister }}" style="cursor:pointer;padding:14px 6px;border:0;font-family:'Press Start 2P',monospace;font-size:9px;background:{{ regTabBg }};color:{{ regTabColor }}">CREAR CUENTA</button>
+      </div>
+      <form onSubmit="{{ submitAuth }}" style="display:flex;flex-direction:column;gap:16px">
+        <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:14px;color:#9fb3c4">Usuario
+          <input value="{{ fUser }}" onInput="{{ setFUser }}" placeholder="Tu alias de jugador" autocomplete="username" style="height:48px;padding:0 14px;background:#0a0a0f;border:2px solid #00f5ff66;color:#e8feff;font-family:'Courier Prime',monospace;font-size:16px;outline:none;transition:box-shadow .15s,border-color .15s" style-focus="border-color:#00f5ff;box-shadow:0 0 14px #00f5ff99,inset 0 0 8px #00f5ff33">
+        </label>
+        <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+          <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:14px;color:#9fb3c4">Correo electrónico
+            <input type="email" value="{{ fEmail }}" onInput="{{ setFEmail }}" placeholder="jugador@ejemplo.com" autocomplete="email" style="height:48px;padding:0 14px;background:#0a0a0f;border:2px solid #00f5ff66;color:#e8feff;font-family:'Courier Prime',monospace;font-size:16px;outline:none" style-focus="border-color:#00f5ff;box-shadow:0 0 14px #00f5ff99,inset 0 0 8px #00f5ff33">
+          </label>
+        </sc-if>
+        <label style="display:flex;flex-direction:column;gap:8px;font-weight:700;font-size:14px;color:#9fb3c4">Contraseña
+          <input type="password" value="{{ fPass }}" onInput="{{ setFPass }}" placeholder="••••••••" autocomplete="current-password" style="height:48px;padding:0 14px;background:#0a0a0f;border:2px solid #00f5ff66;color:#e8feff;font-family:'Courier Prime',monospace;font-size:16px;outline:none" style-focus="border-color:#00f5ff;box-shadow:0 0 14px #00f5ff99,inset 0 0 8px #00f5ff33">
+        </label>
+        <sc-if value="{{ authError }}" hint-placeholder-val="{{ false }}">
+          <span style="color:#ff006e;font-size:14px;font-weight:700">{{ authError }}</span>
+        </sc-if>
+        <button type="submit" style="cursor:pointer;margin-top:4px;background:transparent;border:2px solid #f5ff00;color:#f5ff00;padding:16px;font-family:'Press Start 2P',monospace;font-size:11px;box-shadow:0 0 12px #f5ff0055" style-hover="background:#f5ff00;color:#0a0a0f" style-active="transform:scale(.96) translateY(2px)">{{ authSubmitLabel }}</button>
+      </form>
+      <div style="display:flex;align-items:center;gap:12px;color:#5f6f80;font-size:13px"><span style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#5f6f80)"></span>o continúa con<span style="flex:1;height:1px;background:linear-gradient(90deg,#5f6f80,transparent)"></span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button onClick="{{ socialGoogle }}" style="cursor:pointer;height:46px;background:transparent;border:1px solid #5f6f80;color:#c4d6e3;font-weight:700;font-size:15px" style-hover="border-color:#00f5ff;color:#00f5ff" style-active="transform:scale(.96)">Google</button>
+        <button onClick="{{ socialGithub }}" style="cursor:pointer;height:46px;background:transparent;border:1px solid #5f6f80;color:#c4d6e3;font-weight:700;font-size:15px" style-hover="border-color:#00f5ff;color:#00f5ff" style-active="transform:scale(.96)">GitHub</button>
+      </div>
+      <button onClick="{{ playGuest }}" style="cursor:pointer;background:none;border:0;border-top:1px dashed #ffffff22;padding:16px 0 0;color:#ff006e;font-family:'Press Start 2P',monospace;font-size:9px;line-height:1.8" style-hover="color:#f5ff00">JUGAR COMO INVITADO</button>
+      <span style="margin-top:-14px;text-align:center;font-size:13px;color:#6f8396">Sin cuenta: tus puntuaciones no entran en el ranking global.</span>
+    </div>
+  </main>
+</sc-if>
+
+<sc-if value="{{ isFame }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1100px;margin:0 auto;padding:56px 20px 96px;display:flex;flex-direction:column;gap:28px;animation:av-enter .35s ease-out">
+    <h1 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(22px,4.6vw,48px);line-height:1.2;color:#fff8e0;text-shadow:0 0 10px #f5ff00,0 0 30px #f5ff0088,3px 3px 0 #ff006e">SALÓN DE LA FAMA</h1>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px">
+      <sc-for list="{{ fameTabs }}" as="t" hint-placeholder-count="6">
+        <button onClick="{{ t.select }}" style="flex:none;cursor:pointer;padding:12px 14px;font-family:'Press Start 2P',monospace;font-size:9px;background:{{ t.bg }};color:{{ t.color }};border:2px solid {{ t.border }};box-shadow:{{ t.glow }}" style-hover="border-color:#f5ff00" style-active="transform:scale(.95)">{{ t.title }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ showUserBest }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:16px 20px;border:2px solid #39ff88;background:#39ff880d;box-shadow:0 0 16px #39ff8833">
+        <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#39ff88">TU MEJOR MARCA</span>
+        <span style="font-weight:700;color:#e8feff">{{ userName }}</span>
+        <span style="font-family:'Press Start 2P',monospace;font-size:12px;color:#f5ff00;margin-left:auto">{{ userBest }}</span>
+        <span style="color:#8aa0b2;font-size:14px">{{ userBestRank }}</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ showLoginHint }}" hint-placeholder-val="{{ true }}">
+      <p style="margin:0;color:#8aa0b2">Inicia sesión para ver <span style="color:#39ff88;font-weight:700">TU MEJOR MARCA</span> destacada en el ranking. <button onClick="{{ goAuth }}" style="cursor:pointer;background:none;border:0;padding:0;color:#00f5ff;font-weight:700;font-size:inherit;text-decoration:underline">Iniciar sesión</button></p>
+    </sc-if>
+
+    <div style="border:2px solid #00f5ff55;background:#0b0b13ee;box-shadow:0 0 24px #00f5ff1a">
+      <div style="display:grid;grid-template-columns:minmax(56px,90px) minmax(0,1fr) auto minmax(90px,140px);gap:12px;padding:14px 18px;border-bottom:2px solid #00f5ff55;font-family:'Press Start 2P',monospace;font-size:9px;color:#00f5ff">
+        <span>RANGO</span><span>JUGADOR</span><span style="text-align:right">PUNTUACIÓN</span><span style="text-align:right">FECHA</span>
+      </div>
+      <sc-if value="{{ fameReveal }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ fameRows }}" as="r" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:minmax(56px,90px) minmax(0,1fr) auto minmax(90px,140px);gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #ffffff0f;background:{{ r.bg }};box-shadow:{{ r.glow }};animation:av-row .45s both;animation-delay:{{ r.delay }}">
+            <span style="font-family:'Press Start 2P',monospace;font-size:{{ r.rankSize }};color:{{ r.rankColor }};text-shadow:{{ r.rankShadow }}">{{ r.rank }}</span>
+            <span style="display:flex;align-items:center;gap:10px;min-width:0"><span style="font-weight:700;font-size:16px;color:{{ r.nameColor }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span><sc-if value="{{ r.isUser }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-family:'Press Start 2P',monospace;font-size:7px;padding:4px 6px;border:1px solid #39ff88;color:#39ff88">TÚ</span></sc-if></span>
+            <span style="font-family:'Press Start 2P',monospace;font-size:11px;color:#e8feff;text-align:right">{{ r.score }}</span>
+            <span style="text-align:right;color:#7f93a5;font-size:14px">{{ r.date }}</span>
+          </div>
+        </sc-for>
+      </sc-if>
+    </div>
+    <p style="margin:0;font-size:13px;color:#5f6f80">Ranking global de demostración combinado con las partidas guardadas en este dispositivo.</p>
+  </main>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;scanlines&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Efectos CRT&quot;},&quot;animatedGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Efectos CRT&quot;},&quot;difficulty&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Normal&quot;,&quot;Difícil&quot;],&quot;default&quot;:&quot;Normal&quot;,&quot;tsType&quot;:&quot;'Normal' | 'Difícil'&quot;,&quot;section&quot;:&quot;Juego&quot;}}">
+const C = { cyan:'#00f5ff', mag:'#ff006e', yel:'#f5ff00' };
+const GAMES = [
+  { id:'arkanoid', title:'ARKANOID', cat:'Bloques', color:C.cyan, shadow:C.mag, glyph:'▀▄●', playable:true,
+    desc:'Destruye cada ladrillo con tu nave y una bola de energía.',
+    long:'Controla la nave Vaus y rebota la bola de energía contra el muro de ladrillos. Cada nivel acelera el ritmo y reduce tu margen de error. Rompe todos los bloques sin dejar caer la bola.',
+    controls:'Ratón, toque o ← → para mover · Espacio o clic para lanzar · P para pausar' },
+  { id:'snake', title:'SNAKE', cat:'Clásico', color:'#39ff88', shadow:C.yel, glyph:'■■■●', playable:true,
+    desc:'Come, crece y no muerdas tu propia cola.',
+    long:'Guía a la serpiente por la rejilla y devora cada bit de energía para crecer. Cada cinco bocados subes de nivel y la velocidad aumenta. Un choque contra la pared o contra ti mismo te cuesta una vida.',
+    controls:'Flechas o WASD · Desliza en móvil · P para pausar' },
+  { id:'tetris', title:'TETRIS', cat:'Puzle', color:C.mag, shadow:C.cyan, glyph:'▙▟', playable:false,
+    desc:'Encaja las piezas que caen y limpia líneas sin parar.',
+    long:'Gira y coloca los tetrominós antes de que toquen el techo. Completa líneas horizontales para eliminarlas y sumar puntos. Cuantas más líneas a la vez, mayor la recompensa.',
+    controls:'Flechas para mover · ↑ para girar · Espacio para caída rápida' },
+  { id:'pacman', title:'PAC-MAN', cat:'Laberinto', color:C.yel, shadow:C.mag, glyph:'◖···', playable:false,
+    desc:'Recorre el laberinto, come puntos y esquiva fantasmas.',
+    long:'Come todos los puntos del laberinto mientras cuatro fantasmas te persiguen. Las píldoras de poder invierten la caza durante unos segundos. Despeja el tablero para pasar de nivel.',
+    controls:'Flechas o WASD para moverte' },
+  { id:'invaders', title:'SPACE INVADERS', cat:'Disparos', color:'#b26bff', shadow:C.cyan, glyph:'▚▞', playable:false,
+    desc:'Defiende la Tierra de oleadas de invasores alienígenas.',
+    long:'Las filas de invasores descienden cada vez más rápido. Dispara desde tu cañón y cúbrete tras los búnkeres antes de que lleguen al suelo. Atento al platillo misterioso: vale puntos extra.',
+    controls:'← → para mover · Espacio para disparar' },
+  { id:'asteroids', title:'ASTEROIDS', cat:'Disparos', color:'#ff8a00', shadow:C.cyan, glyph:'◇ △', playable:false,
+    desc:'Pilota tu nave y pulveriza rocas en el espacio profundo.',
+    long:'Gira, acelera y dispara para fragmentar los asteroides en piezas cada vez más pequeñas. La inercia no perdona: controla el empuje. Usa el hiperespacio solo como último recurso.',
+    controls:'← → para girar · ↑ para acelerar · Espacio para disparar' },
+];
+const CATS = ['Todos','Bloques','Clásico','Puzle','Laberinto','Disparos'];
+const NAMES = ['NEO_K','PIXELQUEEN','KRAKEN','R4DIX','LUNA8BIT','DR.BYTE','ZEROCOOL','MAYA_X','TURBO','GLITCH','VECTRA','NOVA','CHIPTUNE','BLAST'];
+const pad = n => String(Math.max(0, Math.floor(n))).padStart(6, '0');
+const fmtDate = d => { const x = new Date(d); return String(x.getDate()).padStart(2,'0') + '/' + String(x.getMonth()+1).padStart(2,'0') + '/' + x.getFullYear(); };
+function seedScores(id) {
+  let s = [...id].reduce((a, c) => a * 31 + c.charCodeAt(0), 7) >>> 0;
+  const rnd = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const top = 40000 + Math.floor(rnd() * 60000);
+  return Array.from({ length: 12 }, (_, i) => ({
+    name: NAMES[Math.floor(rnd() * NAMES.length)],
+    score: Math.floor(top * Math.pow(0.86, i) * (0.95 + rnd() * 0.05) / 10) * 10,
+    date: new Date(2026, Math.floor(rnd() * 10), 1 + Math.floor(rnd() * 27)).toISOString(),
+  }));
+}
+const SEEDS = Object.fromEntries(GAMES.map(g => [g.id, seedScores(g.id)]));
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+
+class Component extends DCLogic {
+  state = {
+    screen: 'library', detailId: null, query: '', cat: 'Todos', menuOpen: false,
+    w: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    user: load('av_user', null), local: load('av_scores', {}),
+    authTab: 'login', fUser: '', fPass: '', fEmail: '', authError: '',
+    fameGame: 'arkanoid', fameReveal: true,
+    playing: null, loading: false, paused: false, over: false, finalScore: 0,
+    hud: { score: 0, lives: 3, level: 1 }, saved: false, typed: '',
+  };
+  canvasRef = React.createRef();
+  keys = {};
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onKey = e => this.handleKey(e, true);
+    this.onKeyUp = e => { this.keys[e.key] = false; };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+    window.addEventListener('keyup', this.onKeyUp);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    window.removeEventListener('keyup', this.onKeyUp);
+    this.stopLoop(); clearInterval(this.typeTimer); clearTimeout(this.loadTimer);
+  }
+  componentDidUpdate() {
+    if (this.pendingStart && this.canvasRef.current && !this.state.loading) { this.pendingStart = false; this.startEngine(); }
+  }
+
+  // ---- data ----
+  // Backend: para usuarios autenticados, sustituir por GET /api/scores?game=:id (o supabase.from('scores').select().eq('game', id).order('score',{ascending:false}).limit(10))
+  allScores(id) { return [...SEEDS[id], ...(this.state.local[id] || [])].sort((a, b) => b.score - a.score); }
+  best(id) { return this.allScores(id)[0]?.score || 0; }
+  playerName() { return this.state.user?.name || 'INVITADO'; }
+
+  // ---- navigation ----
+  go(screen, extra) {
+    this.stopLoop(); clearTimeout(this.loadTimer);
+    this.setState({ screen, menuOpen: false, detailId: null, over: false, paused: false, ...extra });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+  launch(id) {
+    this.stopLoop(); clearInterval(this.typeTimer); clearTimeout(this.loadTimer);
+    const g = GAMES.find(x => x.id === id);
+    this.pendingStart = g.playable;
+    this.setState({ screen: 'player', playing: id, detailId: null, menuOpen: false, loading: true, paused: false, over: false, saved: false, typed: '', hud: { score: 0, lives: 3, level: 1 } });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    this.loadTimer = setTimeout(() => this.setState({ loading: false }), 1100);
+  }
+
+  // ---- engine ----
+  stopLoop() { cancelAnimationFrame(this.raf); this.g = null; this.keys = {}; }
+  setHud(h) { const o = this.state.hud; if (o.score !== h.score || o.lives !== h.lives || o.level !== h.level) this.setState({ hud: { ...h } }); }
+  endGame(score) { this.g && (this.g.done = true); this.setState({ over: true, finalScore: score }); }
+  hard() { return (this.props.difficulty ?? 'Normal') === 'Difícil'; }
+  startEngine() {
+    const cv = this.canvasRef.current; const ctx = cv.getContext('2d');
+    this.g = this.state.playing === 'snake' ? this.makeSnake() : this.makeArk();
+    this.last = 0;
+    const loop = t => {
+      if (!this.g) return;
+      const dt = this.last ? Math.min(40, t - this.last) : 16; this.last = t;
+      if (!this.state.paused && !this.state.over && !this.g.done) this.g.update(dt);
+      this.g.draw(ctx);
+      this.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+  makeSnake() {
+    const self = this, CELL = 20, COLS = 24, ROWS = 18;
+    const g = { score: 0, lives: 3, level: 1, eaten: 0, acc: 0, base: this.hard() ? 85 : 125 };
+    const reset = () => { g.body = [{ x: 8, y: 9 }, { x: 7, y: 9 }, { x: 6, y: 9 }]; g.dir = { x: 1, y: 0 }; g.next = g.dir; };
+    const food = () => { let f; do { f = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) }; } while (g.body.some(b => b.x === f.x && b.y === f.y)); g.food = f; };
+    reset(); food();
+    g.turn = (x, y) => { if (g.dir.x !== -x || g.dir.y !== -y) g.next = { x, y }; };
+    g.update = dt => {
+      g.acc += dt; const speed = Math.max(55, g.base - (g.level - 1) * 9);
+      while (g.acc >= speed) {
+        g.acc -= speed; g.dir = g.next;
+        const h = { x: g.body[0].x + g.dir.x, y: g.body[0].y + g.dir.y };
+        if (h.x < 0 || h.y < 0 || h.x >= COLS || h.y >= ROWS || g.body.some(b => b.x === h.x && b.y === h.y)) {
+          g.lives--; if (g.lives <= 0) { self.setHud(g); return self.endGame(g.score); }
+          reset(); food(); self.setHud(g); return;
+        }
+        g.body.unshift(h);
+        if (h.x === g.food.x && h.y === g.food.y) { g.score += 10 * g.level; g.eaten++; g.level = 1 + Math.floor(g.eaten / 5); food(); }
+        else g.body.pop();
+        self.setHud(g);
+      }
+    };
+    g.draw = ctx => {
+      ctx.fillStyle = '#05050a'; ctx.fillRect(0, 0, 480, 360);
+      ctx.strokeStyle = '#39ff8812'; ctx.lineWidth = 1;
+      for (let x = 0; x <= COLS; x++) { ctx.beginPath(); ctx.moveTo(x * CELL + .5, 0); ctx.lineTo(x * CELL + .5, 360); ctx.stroke(); }
+      for (let y = 0; y <= ROWS; y++) { ctx.beginPath(); ctx.moveTo(0, y * CELL + .5); ctx.lineTo(480, y * CELL + .5); ctx.stroke(); }
+      ctx.shadowBlur = 14; ctx.shadowColor = C.mag; ctx.fillStyle = C.mag;
+      ctx.fillRect(g.food.x * CELL + 4, g.food.y * CELL + 4, CELL - 8, CELL - 8);
+      ctx.shadowColor = '#39ff88';
+      g.body.forEach((b, i) => { ctx.fillStyle = i === 0 ? C.yel : '#39ff88'; ctx.fillRect(b.x * CELL + 1, b.y * CELL + 1, CELL - 2, CELL - 2); });
+      ctx.shadowBlur = 0;
+    };
+    g.key = (k, down) => {
+      if (!down) return;
+      if (k === 'ArrowUp' || k === 'w') g.turn(0, -1); else if (k === 'ArrowDown' || k === 's') g.turn(0, 1);
+      else if (k === 'ArrowLeft' || k === 'a') g.turn(-1, 0); else if (k === 'ArrowRight' || k === 'd') g.turn(1, 0);
+    };
+    return g;
+  }
+  makeArk() {
+    const self = this, W = 480, H = 360;
+    const g = { score: 0, lives: 3, level: 1, px: 200, pw: 80, py: 334, stuck: true, speed: this.hard() ? 0.34 : 0.27, ball: { x: 240, y: 326, vx: 0, vy: 0, r: 6 } };
+    const ROWC = [C.mag, '#ff8a00', C.yel, '#39ff88', C.cyan, '#b26bff'];
+    const build = () => { g.bricks = []; for (let r = 0; r < 6; r++) for (let c = 0; c < 10; c++) g.bricks.push({ x: 4 + c * 47.2, y: 40 + r * 20, w: 43, h: 15, color: ROWC[r], alive: true, pts: (6 - r) * 10 }); };
+    build();
+    g.launch = () => { if (!g.stuck) return; g.stuck = false; const a = (Math.random() - .5) * .8; g.ball.vx = g.speed * Math.sin(a); g.ball.vy = -g.speed * Math.cos(a); };
+    g.pointer = x => { g.px = Math.max(0, Math.min(W - g.pw, x - g.pw / 2)); };
+    g.update = dt => {
+      const k = self.keys;
+      if (k.ArrowLeft || k.a) g.pointer(g.px + g.pw / 2 - 0.5 * dt);
+      if (k.ArrowRight || k.d) g.pointer(g.px + g.pw / 2 + 0.5 * dt);
+      const b = g.ball;
+      if (g.stuck) { b.x = g.px + g.pw / 2; b.y = g.py - b.r - 1; return; }
+      const steps = 3;
+      for (let s = 0; s < steps; s++) {
+        const px = b.x, py = b.y;
+        b.x += b.vx * dt / steps; b.y += b.vy * dt / steps;
+        if (b.x < b.r) { b.x = b.r; b.vx = Math.abs(b.vx); }
+        if (b.x > W - b.r) { b.x = W - b.r; b.vx = -Math.abs(b.vx); }
+        if (b.y < b.r) { b.y = b.r; b.vy = Math.abs(b.vy); }
+        if (b.vy > 0 && b.y + b.r >= g.py && b.y + b.r <= g.py + 12 && b.x >= g.px - b.r && b.x <= g.px + g.pw + b.r) {
+          const rel = Math.max(-1, Math.min(1, (b.x - (g.px + g.pw / 2)) / (g.pw / 2)));
+          const sp = Math.hypot(b.vx, b.vy); b.vx = sp * Math.sin(rel * 1.05); b.vy = -sp * Math.cos(rel * 1.05); b.y = g.py - b.r;
+        }
+        for (const br of g.bricks) {
+          if (!br.alive) continue;
+          if (b.x + b.r > br.x && b.x - b.r < br.x + br.w && b.y + b.r > br.y && b.y - b.r < br.y + br.h) {
+            br.alive = false; g.score += br.pts * g.level;
+            if (px + b.r <= br.x || px - b.r >= br.x + br.w) b.vx = -b.vx; else b.vy = -b.vy;
+            break;
+          }
+        }
+        if (b.y > H + 10) {
+          g.lives--; g.stuck = true; self.setHud(g);
+          if (g.lives <= 0) return self.endGame(g.score);
+          return;
+        }
+      }
+      if (g.bricks.every(br => !br.alive)) { g.level++; g.speed *= 1.12; build(); g.stuck = true; }
+      self.setHud(g);
+    };
+    g.draw = ctx => {
+      ctx.fillStyle = '#05050a'; ctx.fillRect(0, 0, W, H);
+      g.bricks.forEach(br => { if (!br.alive) return; ctx.shadowBlur = 10; ctx.shadowColor = br.color; ctx.fillStyle = br.color; ctx.fillRect(br.x, br.y, br.w, br.h); ctx.shadowBlur = 0; ctx.fillStyle = '#ffffff40'; ctx.fillRect(br.x, br.y, br.w, 3); });
+      ctx.shadowBlur = 16; ctx.shadowColor = C.cyan; ctx.fillStyle = C.cyan; ctx.fillRect(g.px, g.py, g.pw, 10);
+      ctx.shadowColor = C.yel; ctx.fillStyle = C.yel; ctx.beginPath(); ctx.arc(g.ball.x, g.ball.y, g.ball.r, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+      if (g.stuck && !self.state.over) { ctx.fillStyle = '#e8feff'; ctx.font = '10px "Press Start 2P", monospace'; ctx.textAlign = 'center'; ctx.fillText('PULSA ESPACIO O TOCA PARA LANZAR', W / 2, 250); }
+    };
+    g.key = (k, down) => { if (down && k === ' ') g.launch(); };
+    return g;
+  }
+  handleKey(e, down) {
+    if (this.state.screen !== 'player') return;
+    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { if (!this.state.over && !this.state.loading) this.setState(s => ({ paused: !s.paused })); return; }
+    this.keys[e.key] = down;
+    if (this.g && !this.state.paused) this.g.key(e.key, down);
+  }
+  canvasX(clientX) { const r = this.canvasRef.current.getBoundingClientRect(); return (clientX - r.left) * 480 / r.width; }
+
+  saveScore = () => {
+    const id = this.state.playing;
+    const entry = { name: this.playerName(), score: this.state.finalScore, date: new Date().toISOString() };
+    // Backend: si this.state.user existe, enviar POST /api/scores { game: id, ...entry } (o supabase.from('scores').insert(...)) con el token de sesión.
+    const local = { ...this.state.local, [id]: [...(this.state.local[id] || []), entry] };
+    localStorage.setItem('av_scores', JSON.stringify(local));
+    this.setState({ local, saved: true, typed: '' });
+    const msg = 'PUNTUACIÓN GUARDADA'; let i = 0;
+    clearInterval(this.typeTimer);
+    this.typeTimer = setInterval(() => { i++; this.setState({ typed: msg.slice(0, i) }); if (i >= msg.length) clearInterval(this.typeTimer); }, 65);
+  };
+  login(name) {
+    // Backend: sustituir por supabase.auth.signInWithPassword / signUp / signInWithOAuth y guardar la sesión devuelta.
+    const user = { name: name.toUpperCase().slice(0, 14) };
+    localStorage.setItem('av_user', JSON.stringify(user));
+    this.go('library', { user, fUser: '', fPass: '', fEmail: '', authError: '' });
+  }
+  submitAuth = e => {
+    e.preventDefault();
+    const { fUser, fPass, fEmail, authTab } = this.state;
+    if (!fUser.trim() || !fPass) return this.setState({ authError: 'Introduce tu usuario y tu contraseña.' });
+    if (authTab === 'register' && !/^\S+@\S+\.\S+$/.test(fEmail)) return this.setState({ authError: 'Introduce un correo electrónico válido.' });
+    if (fPass.length < 4) return this.setState({ authError: 'La contraseña debe tener al menos 4 caracteres.' });
+    this.login(fUser.trim());
+  };
+
+  renderVals() {
+    const s = this.state;
+    const mobile = s.w < 760;
+    const q = s.query.trim().toLowerCase();
+    const deco = g => ({
+      ...g, num: String(GAMES.indexOf(g) + 1).padStart(2, '0'),
+      colorDim: g.color + '88', colorFaint: g.color + '33', shadowColor: g.shadow,
+      thumbBg: `radial-gradient(circle at 25% 30%, ${g.color}55, transparent 55%), radial-gradient(circle at 85% 85%, ${g.shadow}44, transparent 50%), repeating-linear-gradient(0deg, #ffffff0a 0 2px, transparent 2px 10px), repeating-linear-gradient(90deg, #ffffff0a 0 2px, transparent 2px 10px), #0d0d16`,
+      best: pad(this.best(g.id)),
+    });
+    const games = GAMES.filter(g => (s.cat === 'Todos' || g.cat === s.cat) && (!q || g.title.toLowerCase().includes(q) || g.cat.toLowerCase().includes(q)))
+      .map(g => ({ ...deco(g), open: () => this.setState({ detailId: g.id }), play: e => { e.stopPropagation(); this.launch(g.id); } }));
+    const dg = GAMES.find(g => g.id === s.detailId);
+    const pg = GAMES.find(g => g.id === s.playing) || GAMES[0];
+    const rowsFor = (id, max) => this.allScores(id).slice(0, max).map((r, i) => {
+      const medal = ['#ffd700', '#d8e4f0', '#ff9a4d'][i];
+      const isUser = !!s.user && r.name === s.user.name;
+      return {
+        rank: String(i + 1).padStart(2, '0'), name: r.name, score: pad(r.score), date: fmtDate(r.date), isUser,
+        delay: (i * 0.06) + 's', rankColor: medal || '#7f93a5', rankSize: medal ? '14px' : '11px',
+        rankShadow: medal ? `0 0 10px ${medal}` : 'none',
+        nameColor: isUser ? '#39ff88' : (medal || '#d8f6ff'),
+        bg: isUser ? '#39ff8814' : (medal ? medal + '0d' : 'transparent'),
+        glow: isUser ? 'inset 3px 0 0 #39ff88' : (medal ? `inset 3px 0 0 ${medal}` : 'none'),
+      };
+    });
+    const userEntries = s.user ? this.allScores(s.fameGame).map((r, i) => ({ ...r, i })).filter(r => r.name === s.user.name) : [];
+    const ub = userEntries[0];
+    const activeNav = (on) => ({ color: on ? C.cyan : '#9fb3c4', line: on ? C.cyan : 'transparent', glow: on ? '0 6px 10px -6px #00f5ff' : 'none' });
+    const lib = activeNav(s.screen === 'library'), fame = activeNav(s.screen === 'fame');
+    const ext = `<!doctype html><html><body style="margin:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#05050a;color:#e8feff;font-family:'Courier New',monospace;text-align:center;padding:24px;box-sizing:border-box"><div style="font:bold 22px monospace;color:${pg.color};text-shadow:0 0 12px ${pg.color}">${pg.title}</div><div style="color:#f5ff00;font-weight:bold">CARTUCHO EXTERNO NO CARGADO</div><div style="color:#9fb3c4;max-width:36ch;line-height:1.5">Este contenedor aislado carga juegos HTML externos (por ejemplo, /games/${pg.id}/index.html). El juego debe enviar su puntuación con postMessage.</div></body></html>`;
+    const isRegister = s.authTab === 'register';
+    return {
+      gridAnim: (this.props.animatedGrid ?? true) ? 'av-grid 1.6s linear infinite' : 'none',
+      scanlines: this.props.scanlines ?? true,
+      showNav: s.screen !== 'player', desktop: !mobile, mobile, menuOpen: s.menuOpen && mobile,
+      loggedIn: !!s.user, loggedOut: !s.user, userName: s.user?.name || '', initials: (s.user?.name || '?').slice(0, 2),
+      libColor: lib.color, libLine: lib.line, libGlow: lib.glow, fameColor: fame.color, fameLine: fame.line, fameGlow: fame.glow,
+      goLibrary: () => this.go('library'), goFame: () => this.go('fame', { fameReveal: true }), goAuth: () => this.go('auth', { authError: '' }),
+      toggleMenu: () => this.setState(x => ({ menuOpen: !x.menuOpen })),
+      logout: () => { localStorage.removeItem('av_user'); this.setState({ user: null, menuOpen: false }); },
+      isLibrary: s.screen === 'library', isPlayer: s.screen === 'player', isAuth: s.screen === 'auth', isFame: s.screen === 'fame',
+      query: s.query, setQuery: e => this.setState({ query: e.target.value }),
+      chips: CATS.map(c => ({ label: c, select: () => this.setState({ cat: c }), bg: s.cat === c ? '#ff006e22' : 'transparent', color: s.cat === c ? C.mag : '#9fb3c4', border: s.cat === c ? C.mag : '#ffffff22' })),
+      games, noResults: games.length === 0,
+      hasDetail: !!dg && s.screen === 'library',
+      d: dg ? { ...deco(dg), play: () => this.launch(dg.id) } : {},
+      detailRows: dg ? rowsFor(dg.id, 10) : [],
+      closeDetail: () => this.setState({ detailId: null }),
+      playingAsLabel: s.user ? `Jugando como ${s.user.name}` : 'Jugarás como INVITADO',
+      p: { ...deco(pg), external: !pg.playable },
+      canvasRef: this.canvasRef,
+      hudScore: pad(s.hud.score), hudLives: '♥'.repeat(Math.max(0, s.hud.lives)) || '—', hudLevel: String(s.hud.level).padStart(2, '0'),
+      playerName: this.playerName(), loading: s.loading, paused: s.paused, pauseLabel: s.paused ? 'CONTINUAR' : 'PAUSA',
+      togglePause: () => { if (!s.over && !s.loading) this.setState(x => ({ paused: !x.paused })); },
+      exitGame: () => { clearInterval(this.typeTimer); this.go('library'); },
+      onPointer: e => this.g?.pointer && this.g.pointer(this.canvasX(e.clientX)),
+      onCanvasClick: () => this.g?.launch && this.g.launch(),
+      onTouchStart: e => { const t = e.touches[0]; this.touch = { x: t.clientX, y: t.clientY }; this.g?.launch && this.g.launch(); },
+      onTouchMove: e => { const t = e.touches[0]; this.g?.pointer && this.g.pointer(this.canvasX(t.clientX)); },
+      onTouchEnd: e => {
+        if (!this.touch || !this.g?.turn) return; const t = e.changedTouches[0];
+        const dx = t.clientX - this.touch.x, dy = t.clientY - this.touch.y;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) > 20) Math.abs(dx) > Math.abs(dy) ? this.g.turn(Math.sign(dx), 0) : this.g.turn(0, Math.sign(dy));
+      },
+      externalDoc: ext, simulateEnd: () => this.endGame(Math.floor(2000 + Math.random() * 30000) * 10 / 10 | 0),
+      over: s.over && s.screen === 'player', finalScore: pad(s.finalScore), canSave: !s.saved, saved: s.saved, typed: s.typed,
+      saveNote: s.user ? 'Se registrará en el ranking con tu cuenta.' : 'Como invitado, se guarda solo en este dispositivo.',
+      saveScore: this.saveScore, replay: () => this.launch(s.playing),
+      tabLogin: () => this.setState({ authTab: 'login', authError: '' }), tabRegister: () => this.setState({ authTab: 'register', authError: '' }),
+      loginTabBg: !isRegister ? C.mag : 'transparent', loginTabColor: !isRegister ? '#0a0a0f' : C.mag,
+      regTabBg: isRegister ? C.mag : 'transparent', regTabColor: isRegister ? '#0a0a0f' : C.mag,
+      isRegister, authSubmitLabel: isRegister ? 'CREAR CUENTA' : 'ENTRAR',
+      fUser: s.fUser, fPass: s.fPass, fEmail: s.fEmail,
+      setFUser: e => this.setState({ fUser: e.target.value }), setFPass: e => this.setState({ fPass: e.target.value }), setFEmail: e => this.setState({ fEmail: e.target.value }),
+      authError: s.authError, submitAuth: this.submitAuth,
+      socialGoogle: () => this.login('JUGADOR_G'), socialGithub: () => this.login('JUGADOR_GH'),
+      playGuest: () => { localStorage.removeItem('av_user'); this.go('library', { user: null }); },
+      fameTabs: GAMES.map(g => { const on = g.id === s.fameGame; return { title: g.title, select: () => this.setState({ fameGame: g.id, fameReveal: false }, () => requestAnimationFrame(() => this.setState({ fameReveal: true }))), bg: on ? g.color + '22' : 'transparent', color: on ? g.color : '#9fb3c4', border: on ? g.color : '#ffffff22', glow: on ? `0 0 14px ${g.color}66` : 'none' }; }),
+      fameReveal: s.fameReveal, fameRows: rowsFor(s.fameGame, 10),
+      showUserBest: !!ub, userBest: ub ? pad(ub.score) : '', userBestRank: ub ? `Puesto #${ub.i + 1}` : '',
+      showLoginHint: !s.user,
+    };
+  }
+}
+</script>
+</body>
+</html>
