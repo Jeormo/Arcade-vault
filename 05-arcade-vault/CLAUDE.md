@@ -17,6 +17,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Tailwind is wired through Turbopack, not PostCSS: `next.config.ts` has a `turbopack.rules` entry that runs `@tailwindcss/turbopack` on `*.css`. Theme tokens (`--background`, `--foreground`, fonts) are defined in `app/globals.css` via `@theme inline`, with dark mode driven by `prefers-color-scheme`.
 - `app/layout.tsx` uses the globally typed `LayoutProps<"/">` helper (no import) and loads Geist fonts through `next/font/google`.
 
+## Project intent
+
+Arcade Vault is a platform to play games online and compete for the highest score. The README says development follows spec-driven design (`/spec` and `/spec-impl` skills from `Klerith/fernando-skills`, installed with `npx skills@latest add Klerith/fernando-skills`).
+
 ## State
 
-The project is a fresh `create-next-app` scaffold: `app/page.tsx` is still the default template, and the `references/` directory is empty. There is no application architecture yet.
+The project is still a fresh `create-next-app` scaffold: `app/page.tsx` is the default template and there is no application architecture yet.
+
+## Design reference
+
+`refereces/` (sic, misspelled; tracked in git) holds a Claude Design handoff bundle, `arcade-vault-retro-portal/`. The primary design is `project/Arcade Vault.dc.html`, with a "nocturne" design system under `project/_ds/` (`styles.css`, `readme.md`, `_ds_bundle.js`) and `project/support.js`. These are HTML/CSS/JS prototypes to recreate in React/Tailwind, not code to copy. The bundle README says to read the main HTML file in full and follow its imports before implementing, to ask the user when scope is ambiguous, and not to render or screenshot the prototypes unless asked.
