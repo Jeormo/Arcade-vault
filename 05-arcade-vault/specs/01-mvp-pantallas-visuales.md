@@ -1,6 +1,6 @@
 # SPEC 01 — MVP visual de Arcade Vault (todas las pantallas)
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** —
 > **Date:** 2026-11-09
 > **Objective:** Recrear en Next.js/React/Tailwind las cuatro pantallas del prototipo `refereces/arcade-vault-retro-portal/project/Arcade Vault.dc.html` (Biblioteca con detalle, Reproductor, Acceso y Salón de la Fama) con datos simulados y sin implementar ningún juego.
@@ -89,26 +89,26 @@ Antes del paso 1, leer la guía relevante de `node_modules/next/dist/docs/` (exi
 
 ## Criterios de aceptación
 
-- [ ] `npm run lint` y `npm run build` terminan con código 0.
-- [ ] Existen las rutas `/`, `/juegos/[id]`, `/juegos/[id]/jugar`, `/acceso` y `/salon-de-la-fama`, y cargan sin errores en la consola ni avisos de hidratación.
-- [ ] `/juegos/inexistente` devuelve la página 404.
-- [ ] La Biblioteca muestra 6 tarjetas; el chip «Todos» las muestra todas y «Disparos» muestra exactamente 2.
-- [ ] Buscar «tetris» deja 1 tarjeta; buscar «zzz» muestra «SIN RESULTADOS» y el texto de la búsqueda.
-- [ ] Hacer clic en una tarjeta abre su detalle; el botón «JUGAR» de la tarjeta abre el reproductor sin pasar por el detalle.
-- [ ] El detalle muestra 10 filas de puntuación, con oro, plata y bronce en las tres primeras.
-- [ ] El reproductor oculta la barra de navegación y muestra «CARGANDO CARTUCHO…» durante 1,1 s.
-- [ ] Pulsar P o Esc en el reproductor alterna el overlay «PAUSA» y la etiqueta PAUSA/CONTINUAR.
-- [ ] «SIMULAR FIN DE PARTIDA» abre el modal con una puntuación de 6 dígitos.
-- [ ] «GUARDAR PUNTUACIÓN» escribe en `localStorage["av_scores"]`, muestra «PUNTUACIÓN GUARDADA» y oculta el botón.
-- [ ] Una puntuación guardada aparece en el Salón de la Fama del juego correspondiente tras recargar la página.
-- [ ] En Acceso, enviar vacío muestra «Introduce tu usuario y tu contraseña.»; contraseña de menos de 4 caracteres muestra el error de longitud; en «Crear cuenta», un correo inválido muestra el error de correo.
-- [ ] Un login válido guarda `av_user` en mayúsculas (máx. 14 caracteres) y redirige a `/`.
-- [ ] «Salir» borra `av_user` y la barra vuelve a mostrar «Iniciar Sesión».
-- [ ] Con sesión iniciada, las filas del usuario en el Salón de la Fama llevan la etiqueta «TÚ» y aparece «TU MEJOR MARCA»; sin sesión aparece el aviso de inicio de sesión.
-- [ ] «Jugar como invitado» muestra «Jugarás como INVITADO» en el detalle y deja el HUD con jugador `INVITADO`.
-- [ ] A menos de 760 px la barra muestra el botón de menú, y el panel lateral se abre y se cierra.
-- [ ] No hay ningún `<canvas>` de juego ni código de Arkanoid o Snake en el repositorio.
-- [ ] Ningún archivo importa o copia `refereces/`.
+- [x] `npm run lint` y `npm run build` terminan con código 0.
+- [x] Existen las rutas `/`, `/juegos/[id]`, `/juegos/[id]/jugar`, `/acceso` y `/salon-de-la-fama`, y cargan sin errores en la consola ni avisos de hidratación.
+- [x] `/juegos/inexistente` devuelve la página 404. *(Nota: la página 404 se muestra, pero con código HTTP 200: con `cacheComponents` y `partialPrefetching` el layout se envía en streaming antes de que se ejecute `notFound()`, y el código ya queda fijado. Un 404 real requiere un `proxy.ts`, que queda para otro spec.)*
+- [x] La Biblioteca muestra 6 tarjetas; el chip «Todos» las muestra todas y «Disparos» muestra exactamente 2.
+- [x] Buscar «tetris» deja 1 tarjeta; buscar «zzz» muestra «SIN RESULTADOS» y el texto de la búsqueda.
+- [x] Hacer clic en una tarjeta abre su detalle; el botón «JUGAR» de la tarjeta abre el reproductor sin pasar por el detalle.
+- [x] El detalle muestra 10 filas de puntuación, con oro, plata y bronce en las tres primeras.
+- [x] El reproductor oculta la barra de navegación y muestra «CARGANDO CARTUCHO…» durante 1,1 s.
+- [x] Pulsar P o Esc en el reproductor alterna el overlay «PAUSA» y la etiqueta PAUSA/CONTINUAR.
+- [x] «SIMULAR FIN DE PARTIDA» abre el modal con una puntuación de 6 dígitos.
+- [x] «GUARDAR PUNTUACIÓN» escribe en `localStorage["av_scores"]`, muestra «PUNTUACIÓN GUARDADA» y oculta el botón.
+- [x] Una puntuación guardada aparece en el Salón de la Fama del juego correspondiente tras recargar la página.
+- [x] En Acceso, enviar vacío muestra «Introduce tu usuario y tu contraseña.»; contraseña de menos de 4 caracteres muestra el error de longitud; en «Crear cuenta», un correo inválido muestra el error de correo.
+- [x] Un login válido guarda `av_user` en mayúsculas (máx. 14 caracteres) y redirige a `/`.
+- [x] «Salir» borra `av_user` y la barra vuelve a mostrar «Iniciar Sesión».
+- [x] Con sesión iniciada, las filas del usuario en el Salón de la Fama llevan la etiqueta «TÚ» y aparece «TU MEJOR MARCA»; sin sesión aparece el aviso de inicio de sesión.
+- [x] «Jugar como invitado» muestra «Jugarás como INVITADO» en el detalle y deja el HUD con jugador `INVITADO`.
+- [x] A menos de 760 px la barra muestra el botón de menú, y el panel lateral se abre y se cierra.
+- [x] No hay ningún `<canvas>` de juego ni código de Arkanoid o Snake en el repositorio.
+- [x] Ningún archivo importa o copia `refereces/`.
 
 ## Decisiones tomadas y descartadas
 
