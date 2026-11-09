@@ -28,3 +28,7 @@ The project is still a fresh `create-next-app` scaffold: `app/page.tsx` is the d
 ## Design reference
 
 `refereces/` (sic, misspelled; tracked in git) holds a Claude Design handoff bundle, `arcade-vault-retro-portal/`. The primary design is `project/Arcade Vault.dc.html`, with a "nocturne" design system under `project/_ds/` (`styles.css`, `readme.md`, `_ds_bundle.js`) and `project/support.js`. These are HTML/CSS/JS prototypes to recreate in React/Tailwind, not code to copy. The bundle README says to read the main HTML file in full and follow its imports before implementing, to ask the user when scope is ambiguous, and not to render or screenshot the prototypes unless asked.
+
+## Skills
+
+Usa siempre /frontend-desing para hacer cualquier interfaz de usuario.
