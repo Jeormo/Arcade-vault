@@ -23,7 +23,14 @@ Arcade Vault is a platform to play games online and compete for the highest scor
 
 ## State
 
-The project is still a fresh `create-next-app` scaffold: `app/page.tsx` is the default template and there is no application architecture yet.
+The project is still a fresh `create-next-app` scaffold: `app/page.tsx` is the default template and there is no application architecture yet. The first approved spec, `specs/01-mvp-pantallas-visuales.md` (status "Aprobado"), defines the planned architecture: route groups `(portal)` (with nav bar) and `(player)` (without), mock data in `lib/`, a client `SessionProvider` backed by `localStorage` (`av_user`, `av_scores`), and no game engine.
+
+## Spec workflow
+
+- Specs live in `specs/NN-slug.md` (Spanish, with a `**Status:**` line). `specs/.spec-config.yml` sets `AutoCreateBranch`.
+- `/spec-impl <spec>` only works on specs whose status means "Approved". It creates the branch `spec-NN-slug`, implements the numbered plan one step at a time, and pauses after each step for review.
+- Never commit automatically during `/spec-impl`; the user commits. Implement exactly what the spec says, and put changes of scope in the spec, not in the code.
+- Uncommitted changes in the working tree (for example an untracked `specs/`) should be committed or stashed by the user before the branch switch.
 
 ## Design reference
 

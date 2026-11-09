@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Courier_Prime, Press_Start_2P } from "next/font/google";
+import { Background } from "@/components/background";
+import { Scanlines } from "@/components/scanlines";
+import { SessionProvider } from "@/components/session-provider";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const pressStart = Press_Start_2P({
+  variable: "--font-press-start",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
+  display: "swap",
+});
+
+const courierPrime = Courier_Prime({
+  variable: "--font-courier-prime",
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -16,8 +26,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="es" className={`${pressStart.variable} ${courierPrime.variable} antialiased`}>
+      <body>
+        <Background />
+        <Scanlines />
+        <SessionProvider>
+          <div className="relative z-1 min-h-screen">{children}</div>
+        </SessionProvider>
+      </body>
     </html>
   );
 }
