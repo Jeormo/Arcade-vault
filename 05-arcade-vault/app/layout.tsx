@@ -5,11 +5,16 @@ import { Scanlines } from "@/components/scanlines";
 import { SessionProvider } from "@/components/session-provider";
 import "./globals.css";
 
+// Sin fallback ajustado: los glifos que Press Start 2P no incluye (■ ▀ ▄ ● de las
+// miniaturas) deben caer en la monospace del sistema, como en el diseño de referencia,
+// y no en el Arial reescalado que genera next/font.
 const pressStart = Press_Start_2P({
   variable: "--font-press-start",
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  adjustFontFallback: false,
+  fallback: ["monospace"],
 });
 
 const courierPrime = Courier_Prime({
@@ -17,6 +22,8 @@ const courierPrime = Courier_Prime({
   subsets: ["latin"],
   weight: ["400", "700"],
   display: "swap",
+  adjustFontFallback: false,
+  fallback: ["ui-monospace", "monospace"],
 });
 
 export const metadata: Metadata = {

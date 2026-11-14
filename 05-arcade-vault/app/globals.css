@@ -37,6 +37,14 @@
   --font-arcade: var(--font-press-start), "Press Start 2P", monospace;
   --font-body: var(--font-courier-prime), "Courier Prime", ui-monospace, monospace;
 
+  /* El diseño usa line-height: normal; los tamaños de texto no imponen interlineado. */
+  --text-xs--line-height: normal;
+  --text-sm--line-height: normal;
+  --text-base--line-height: normal;
+  --text-lg--line-height: normal;
+  --text-xl--line-height: normal;
+  --text-3xl--line-height: normal;
+
   --animate-flicker: flicker 4.5s infinite;
   --animate-grid: grid 1.6s linear infinite;
   --animate-pulse: pulse 1.6s ease-in-out infinite;
@@ -101,6 +109,8 @@
   }
   body {
     margin: 0;
+    /* Preflight fija 1.5 en html; el diseño usa el interlineado normal de cada fuente. */
+    line-height: normal;
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-body);

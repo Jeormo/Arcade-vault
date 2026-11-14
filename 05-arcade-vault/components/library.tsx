@@ -34,7 +34,7 @@ export function Library() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar juego por nombre o categoría…"
-            className="h-11.5 min-w-0 flex-1 border-0 bg-transparent font-body text-base text-ink outline-none focus-visible:outline-none"
+            className="h-11.5 min-w-0 flex-1 border-0 bg-transparent px-0.5 py-px font-body text-base text-ink outline-none focus-visible:outline-none [&::-webkit-search-cancel-button]:appearance-none"
           />
         </label>
 
