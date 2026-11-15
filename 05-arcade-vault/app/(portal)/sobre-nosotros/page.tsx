@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ContactForm } from "@/components/contact-form";
 
 export const metadata: Metadata = {
   title: "Sobre nosotros · Arcade Vault",
@@ -140,6 +141,21 @@ export default function AboutPage() {
             CONTACTAR
           </a>
         </div>
+      </section>
+
+      {/* scroll-mt: la barra sticky (63–73 px) no tapa el título al saltar a #contacto. */}
+      <section id="contacto" aria-labelledby="contacto-titulo" className={`scroll-mt-24 ${SPLIT}`}>
+        <div className="flex flex-col gap-3.5">
+          <span className={EYEBROW}>04 · CONTACTO</span>
+          <h2 id="contacto-titulo" className={H2}>
+            HABLA CON EL EQUIPO
+          </h2>
+          <p className="m-0 mt-2 max-w-[42ch] text-lg leading-[1.6] text-pretty text-[#c4d6e3]">
+            ¿Echas de menos un clásico, tienes una idea o has visto un fallo? Cuéntanoslo y te responderemos a tu
+            correo.
+          </p>
+        </div>
+        <ContactForm />
       </section>
 
       <p className="m-0 animate-blink font-arcade text-[9px] text-dim motion-reduce:animate-none">
