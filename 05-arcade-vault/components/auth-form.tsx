@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { useSession } from "@/components/session-provider";
 
-type Tab = "login" | "register";
+export type AuthTab = "login" | "register";
+type Tab = AuthTab;
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "login", label: "INICIAR SESIÓN" },
@@ -20,11 +21,11 @@ const socialClass =
   "h-11.5 cursor-pointer border border-faint bg-transparent text-[15px] font-bold text-[#c4d6e3] hover:border-cyan hover:text-cyan active:scale-96";
 
 /** Acceso simulado: pestañas, validación en cliente, social simulado e invitado. */
-export function AuthForm() {
+export function AuthForm({ initialTab = "login" }: { initialTab?: AuthTab }) {
   const router = useRouter();
   const { login, logout } = useSession();
 
-  const [tab, setTab] = useState<Tab>("login");
+  const [tab, setTab] = useState<Tab>(initialTab);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
