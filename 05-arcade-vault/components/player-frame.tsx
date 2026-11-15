@@ -65,7 +65,7 @@ export function PlayerFrame({ gameId }: { gameId: GameId }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [canPause]);
 
-  const exit = () => router.push("/");
+  const exit = () => router.push("/biblioteca");
 
   const replay = () => {
     setFinalScore(null);

@@ -34,7 +34,7 @@ export function AuthForm() {
 
   const enter = (userName: string) => {
     login(userName);
-    router.push("/");
+    router.push("/biblioteca");
   };
 
   const selectTab = (next: Tab) => {
@@ -52,7 +52,7 @@ export function AuthForm() {
 
   const playAsGuest = () => {
     logout();
-    router.push("/");
+    router.push("/biblioteca");
   };
 
   return (

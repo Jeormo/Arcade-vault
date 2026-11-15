@@ -8,11 +8,12 @@ import { useSession } from "@/components/session-provider";
 type Section = { href: string; label: string; isActive: (pathname: string) => boolean };
 
 const SECTIONS: Section[] = [
+  { href: "/", label: "Inicio", isActive: (p) => p === "/" },
   {
-    href: "/",
+    href: "/biblioteca",
     label: "Biblioteca",
     // El detalle de un juego forma parte de la Biblioteca.
-    isActive: (p) => p === "/" || p.startsWith("/juegos/"),
+    isActive: (p) => p.startsWith("/biblioteca") || p.startsWith("/juegos/"),
   },
   {
     href: "/salon-de-la-fama",
