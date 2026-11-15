@@ -20,6 +20,11 @@ const SECTIONS: Section[] = [
     label: "Salón de la Fama",
     isActive: (p) => p.startsWith("/salon-de-la-fama"),
   },
+  {
+    href: "/sobre-nosotros",
+    label: "Sobre nosotros",
+    isActive: (p) => p.startsWith("/sobre-nosotros"),
+  },
 ];
 
 const loginButton =
@@ -75,8 +80,8 @@ export function NavBar() {
             ARCADE VAULT
           </Link>
 
-          {/* Escritorio (≥ 760 px) */}
-          <div className="hidden flex-1 gap-6 min-[760px]:flex">
+          {/* Escritorio (≥ 1040 px) */}
+          <div className="hidden flex-1 gap-6 min-[1040px]:flex">
             {SECTIONS.map((s) => {
               const active = s.isActive(pathname);
               return (
@@ -84,7 +89,7 @@ export function NavBar() {
                   key={s.href}
                   href={s.href}
                   aria-current={active ? "page" : undefined}
-                  className={`border-b-2 py-1.5 text-base font-bold tracking-[1px] hover:text-yellow ${
+                  className={`border-b-2 py-1.5 text-base font-bold tracking-[1px] whitespace-nowrap hover:text-yellow ${
                     active
                       ? "border-cyan text-cyan shadow-[0_6px_10px_-6px_#00f5ff]"
                       : "border-transparent text-muted"
@@ -96,7 +101,7 @@ export function NavBar() {
             })}
           </div>
 
-          <div className="hidden min-[760px]:block">
+          <div className="hidden min-[1040px]:block">
             {user ? (
               <div className="flex items-center gap-3">
                 <Avatar name={user.name} size="sm" />
@@ -112,14 +117,14 @@ export function NavBar() {
             )}
           </div>
 
-          {/* Móvil (< 760 px) */}
+          {/* Móvil (< 1040 px) */}
           <button
             type="button"
             onClick={() => setMenuOpenAt(pathname)}
             aria-label="Abrir menú"
             aria-expanded={menuOpen}
             aria-controls="menu-movil"
-            className="ml-auto flex size-11 cursor-pointer flex-col items-center justify-center gap-1.25 border-2 border-cyan bg-transparent shadow-[0_0_10px_#00f5ff55] active:scale-94 min-[760px]:hidden"
+            className="ml-auto flex size-11 cursor-pointer flex-col items-center justify-center gap-1.25 border-2 border-cyan bg-transparent shadow-[0_0_10px_#00f5ff55] active:scale-94 min-[1040px]:hidden"
           >
             <span className="h-0.75 w-5 bg-cyan" />
             <span className="h-0.75 w-5 bg-cyan" />
@@ -129,7 +134,7 @@ export function NavBar() {
       </nav>
 
       {menuOpen && (
-        <div className="min-[760px]:hidden">
+        <div className="min-[1040px]:hidden">
           <div aria-hidden="true" onClick={closeMenu} className="fixed inset-0 z-70 animate-[fade_0.2s] bg-bg/80" />
           <aside
             id="menu-movil"
