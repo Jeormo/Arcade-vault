@@ -20,7 +20,7 @@ export default async function GameDetailPage({ params }: PageProps<"/juegos/[id]
       className="mx-auto flex max-w-295 animate-[enter_0.3s_ease-out] flex-col gap-8 px-5 pt-8 pb-16"
     >
       <Link
-        href="/"
+        href="/biblioteca"
         className="self-start border-2 border-cyan bg-transparent px-3.5 py-3 font-arcade text-[10px] text-cyan hover:bg-cyan hover:text-bg active:translate-y-0.5 active:scale-95"
       >
         &lt; VOLVER AL VAULT

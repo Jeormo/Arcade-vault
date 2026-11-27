@@ -1,0 +1,42 @@
+- generic [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - navigation [ref=f7e64]:
+      - generic [ref=f7e65]:
+        - link "ARCADE VAULT" [ref=f7e66] [cursor=pointer]:
+          - /url: /
+        - generic [ref=f7e67]:
+          - link "Inicio" [ref=f7e68] [cursor=pointer]:
+            - /url: /
+          - link "Biblioteca" [ref=f7e69] [cursor=pointer]:
+            - /url: /biblioteca
+          - link "Salón de la Fama" [ref=f7e70] [cursor=pointer]:
+            - /url: /salon-de-la-fama
+          - link "Sobre nosotros" [ref=f7e71] [cursor=pointer]:
+            - /url: /sobre-nosotros
+        - link "Iniciar Sesión" [active] [ref=f7e73] [cursor=pointer]:
+          - /url: /acceso
+    - main [ref=f7e74]:
+      - generic [ref=f7e97]:
+        - heading "ARCADE VAULT" [level=1] [ref=f7e98]
+        - tablist "Tipo de acceso" [ref=f7e99]:
+          - tab "INICIAR SESIÓN" [selected] [ref=f7e100] [cursor=pointer]
+          - tab "CREAR CUENTA" [ref=f7e101] [cursor=pointer]
+        - tabpanel [ref=f7e102]:
+          - generic [ref=f7e103]:
+            - text: Usuario
+            - textbox "Usuario" [ref=f7e104]:
+              - /placeholder: Tu alias de jugador
+          - generic [ref=f7e105]:
+            - text: Contraseña
+            - textbox "Contraseña" [ref=f7e106]:
+              - /placeholder: ••••••••
+          - button "ENTRAR" [ref=f7e107] [cursor=pointer]
+        - generic [ref=f7e108]: o continúa con
+        - generic [ref=f7e111]:
+          - button "Google" [ref=f7e112] [cursor=pointer]
+          - button "GitHub" [ref=f7e113] [cursor=pointer]
+        - generic [ref=f7e114]:
+          - button "JUGAR COMO INVITADO" [ref=f7e115] [cursor=pointer]
+          - generic [ref=f7e116]: "Sin cuenta: tus puntuaciones no entran en el ranking global."
+  - button "Open Next.js Dev Tools" [ref=f7e59] [cursor=pointer]
+  - alert [ref=f7e63]: ARCADE VAULT

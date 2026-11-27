@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#0a0a0f;color:#d8f6ff;font-family:'Courier Prime',ui-monospace,monospace}
+a{color:#00f5ff;text-decoration:none}a:hover{color:#f5ff00}
+:focus-visible{outline:2px solid #f5ff00;outline-offset:3px}
+@keyframes av-flicker{0%,19%,21%,23%,55%,57%,100%{opacity:1;text-shadow:0 0 6px #00f5ff,0 0 18px #00f5ff,0 0 42px #00f5ff,3px 3px 0 #ff006e}20%,22%,56%{opacity:.55;text-shadow:none}}
+@keyframes av-grid{from{background-position:0 0}to{background-position:0 48px}}
+@keyframes av-pulse{0%,100%{box-shadow:0 0 10px #f5ff00,0 0 26px #f5ff0066}50%{box-shadow:0 0 22px #f5ff00,0 0 56px #f5ff0099}}
+@keyframes av-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes av-blink{50%{opacity:0}}
+</style>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0a0a0f"/><text x="50" y="62" font-family="monospace" font-weight="bold" font-size="30" fill="#ff006e" text-anchor="middle">AV</text></svg></template>
+</helmet>
+
+<div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 50% 70%,#ff006e1c,transparent 55%),#0a0a0f">
+  <div style="position:absolute;left:-50%;right:-50%;top:70%;height:80%;transform:perspective(420px) rotateX(62deg);transform-origin:top center;background-image:linear-gradient(#00f5ff3a 1px,transparent 1px),linear-gradient(90deg,#ff006e2e 1px,transparent 1px);background-size:48px 48px;animation:av-grid 1.6s linear infinite;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 30%,#000)"></div>
+  <div style="position:absolute;left:0;right:0;top:70%;height:2px;background:#ff006e;box-shadow:0 0 18px #ff006e,0 0 40px #ff006e"></div>
+</div>
+<div style="position:fixed;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(0deg,#00000055 0 1px,transparent 1px 3px);mix-blend-mode:multiply"></div>
+
+<div style="position:relative;z-index:1;min-height:100vh">
+  <nav style="position:sticky;top:0;z-index:50;background:#0a0a0fe6;backdrop-filter:blur(8px);border-bottom:1px solid #00f5ff44;box-shadow:0 4px 24px #00f5ff14">
+    <div style="max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <a href="Arcade Vault Home.html" style="flex:1;font-family:'Press Start 2P',monospace;font-size:14px;color:#00f5ff;text-shadow:0 0 8px #00f5ff,2px 2px 0 #ff006e;letter-spacing:1px">ARCADE VAULT</a>
+      <div style="display:flex;gap:22px;align-items:center">
+        <a href="Arcade Vault Home.html" style="font-weight:700;font-size:16px;color:#9fb3c4" style-hover="color:#f5ff00">Inicio</a>
+        <span style="font-weight:700;font-size:16px;color:#00f5ff;padding:6px 0;border-bottom:2px solid #00f5ff">Sobre nosotros</span>
+      </div>
+    </div>
+  </nav>
+
+  <main style="max-width:1180px;margin:0 auto;padding:clamp(48px,10vh,120px) 20px 120px;display:flex;flex-direction:column;gap:clamp(64px,12vh,128px);animation:av-enter .4s ease-out">
+
+    <section data-screen-label="Sobre nosotros · Hero" style="display:flex;flex-direction:column;gap:26px;max-width:920px">
+      <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#ff006e;letter-spacing:2px;text-shadow:0 0 8px #ff006e">SOBRE NOSOTROS</span>
+      <h1 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(26px,5.6vw,64px);line-height:1.2;color:#e8feff;animation:av-flicker 5s infinite">SALVAMOS LAS<br>RECREATIVAS DEL<br>OLVIDO</h1>
+      <p style="margin:0;font-size:clamp(18px,2.2vw,22px);line-height:1.55;color:#c4d6e3;max-width:50ch;text-wrap:pretty">Arcade Vault nació de una idea sencilla: que cualquiera pueda volver a sentir la emoción de la sala recreativa sin moneda, sin descarga y sin esperar turno.</p>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(28px,5vw,64px);align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#00f5ff">01 · NUESTRA HISTORIA</span>
+        <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(16px,2.2vw,22px);line-height:1.5;color:#e8feff">DE LA SALA AL NAVEGADOR</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;font-size:18px;line-height:1.6;color:#c4d6e3;max-width:60ch">
+        <p style="margin:0;text-wrap:pretty">Crecimos entre el zumbido de las máquinas, el brillo de las pantallas CRT y las iniciales de tres letras en lo alto del marcador. Muchas de esas salas cerraron, pero los juegos no tenían por qué desaparecer con ellas.</p>
+        <p style="margin:0;text-wrap:pretty">Por eso construimos un vault: un lugar donde los clásicos se conservan, se juegan y se compiten como el primer día. Abres la página, eliges un cartucho y empiezas a jugar.</p>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#00f5ff">02 · LO QUE NOS MUEVE</span>
+        <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(16px,2.2vw,22px);line-height:1.5;color:#e8feff">NUESTRAS REGLAS DEL JUEGO</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:22px">
+        <article style="display:flex;flex-direction:column;gap:14px;padding:24px;background:#0e0e17e6;border:2px solid #00f5ff66;box-shadow:0 0 16px #00f5ff1f;transition:transform .2s,box-shadow .2s,border-color .2s" style-hover="transform:translateY(-4px);border-color:#00f5ff;box-shadow:0 0 24px #00f5ff66">
+          <span style="font-family:'Press Start 2P',monospace;font-size:22px;color:#00f5ff;text-shadow:0 0 10px #00f5ff">▶</span>
+          <h3 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:12px;line-height:1.6;color:#e8feff">JUGAR, SIN BARRERAS</h3>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#a9bccc;text-wrap:pretty">Gratis, sin anuncios y sin instalar nada. Funciona en el ordenador y en el móvil.</p>
+        </article>
+        <article style="display:flex;flex-direction:column;gap:14px;padding:24px;background:#0e0e17e6;border:2px solid #ff006e66;box-shadow:0 0 16px #ff006e1f;transition:transform .2s,box-shadow .2s,border-color .2s" style-hover="transform:translateY(-4px);border-color:#ff006e;box-shadow:0 0 24px #ff006e66">
+          <span style="font-family:'Press Start 2P',monospace;font-size:22px;color:#ff006e;text-shadow:0 0 10px #ff006e">♥</span>
+          <h3 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:12px;line-height:1.6;color:#e8feff">RESPETO AL ORIGINAL</h3>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#a9bccc;text-wrap:pretty">Cuidamos el ritmo, los controles y la estética de cada clásico. Nada de remakes que pierdan la esencia.</p>
+        </article>
+        <article style="display:flex;flex-direction:column;gap:14px;padding:24px;background:#0e0e17e6;border:2px solid #f5ff0066;box-shadow:0 0 16px #f5ff001f;transition:transform .2s,box-shadow .2s,border-color .2s" style-hover="transform:translateY(-4px);border-color:#f5ff00;box-shadow:0 0 24px #f5ff0066">
+          <span style="font-family:'Press Start 2P',monospace;font-size:22px;color:#f5ff00;text-shadow:0 0 10px #f5ff00">★</span>
+          <h3 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:12px;line-height:1.6;color:#e8feff">COMPETIR LIMPIO</h3>
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#a9bccc;text-wrap:pretty">Un ranking global justo, donde cada récord se gana jugando y cada nombre en el Salón de la Fama cuenta.</p>
+        </article>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(28px,5vw,64px);align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'Press Start 2P',monospace;font-size:10px;color:#00f5ff">03 · EL EQUIPO</span>
+        <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(16px,2.2vw,22px);line-height:1.5;color:#e8feff">HECHO POR JUGADORES</h2>
+      </div>
+      <p style="margin:0;font-size:18px;line-height:1.6;color:#c4d6e3;max-width:60ch;text-wrap:pretty">Somos un pequeño equipo de desarrolladores, diseñadores y coleccionistas con una misma obsesión: el récord que nunca conseguimos batir. Cada juego que entra en el vault lo probamos nosotros primero, partida tras partida.</p>
+    </section>
+
+    <section style="display:flex;flex-direction:column;align-items:flex-start;gap:22px;padding:clamp(28px,5vw,48px);border:3px solid #f5ff00;background:linear-gradient(180deg,#16160bdd,#0c0c14ee);box-shadow:0 0 28px #f5ff0033,inset 0 0 22px #f5ff0010">
+      <h2 style="margin:0;font-family:'Press Start 2P',monospace;font-weight:400;font-size:clamp(18px,3vw,30px);line-height:1.4;color:#e8feff">¿LISTO PARA EL<br>SIGUIENTE NIVEL?</h2>
+      <p style="margin:0;font-size:18px;color:#c4d6e3;max-width:46ch">Crea tu cuenta gratis y deja tus iniciales en el marcador.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <a href="Arcade Vault Home.html#crear-cuenta" style="background:#f5ff0010;border:3px solid #f5ff00;color:#f5ff00;padding:18px 22px;font-family:'Press Start 2P',monospace;font-size:12px;animation:av-pulse 1.6s ease-in-out infinite" style-hover="background:#f5ff00;color:#0a0a0f">CREAR CUENTA</a>
+        <a href="mailto:hola@arcadevault.com" style="border:3px solid #00f5ff;color:#00f5ff;padding:18px 22px;font-family:'Press Start 2P',monospace;font-size:12px" style-hover="background:#00f5ff;color:#0a0a0f">CONTACTAR</a>
+      </div>
+    </section>
+
+    <p style="margin:0;font-family:'Press Start 2P',monospace;font-size:9px;color:#7f93a5;animation:av-blink 1.2s steps(1) infinite">GAME OVER? NUNCA. · ARCADE VAULT</p>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

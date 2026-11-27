@@ -1,0 +1,90 @@
+- generic [active] [ref=f8e1]:
+  - generic [ref=f8e2]:
+    - navigation [ref=f8e3]:
+      - generic [ref=f8e4]:
+        - link "ARCADE VAULT" [ref=f8e5] [cursor=pointer]:
+          - /url: /
+        - generic [ref=f8e6]:
+          - link "Inicio" [ref=f8e7] [cursor=pointer]:
+            - /url: /
+          - link "Biblioteca" [ref=f8e8] [cursor=pointer]:
+            - /url: /biblioteca
+          - link "Salón de la Fama" [ref=f8e9] [cursor=pointer]:
+            - /url: /salon-de-la-fama
+          - link "Sobre nosotros" [ref=f8e10] [cursor=pointer]:
+            - /url: /sobre-nosotros
+        - link "Iniciar Sesión" [ref=f8e12] [cursor=pointer]:
+          - /url: /acceso
+    - main [ref=f8e13]:
+      - generic [ref=f8e14]:
+        - generic [ref=f8e15]: SOBRE NOSOTROS
+        - heading "SALVAMOS LAS RECREATIVAS DEL OLVIDO" [level=1] [ref=f8e16]: SALVAMOS LASRECREATIVAS DELOLVIDO
+        - paragraph [ref=f8e17]: "Arcade Vault nació de una idea sencilla: que cualquiera pueda volver a sentir la emoción de la sala recreativa sin moneda, sin descarga y sin esperar turno."
+      - region "DE LA SALA AL NAVEGADOR" [ref=f8e18]:
+        - generic [ref=f8e19]:
+          - generic [ref=f8e20]: 01 · NUESTRA HISTORIA
+          - heading "DE LA SALA AL NAVEGADOR" [level=2] [ref=f8e21]
+        - generic [ref=f8e22]:
+          - paragraph [ref=f8e23]: Crecimos entre el zumbido de las máquinas, el brillo de las pantallas CRT y las iniciales de tres letras en lo alto del marcador. Muchas de esas salas cerraron, pero los juegos no tenían por qué desaparecer con ellas.
+          - paragraph [ref=f8e24]: "Por eso construimos un vault: un lugar donde los clásicos se conservan, se juegan y se compiten como el primer día. Abres la página, eliges un cartucho y empiezas a jugar."
+      - region "NUESTRAS REGLAS DEL JUEGO" [ref=f8e25]:
+        - generic [ref=f8e26]:
+          - generic [ref=f8e27]: 02 · LO QUE NOS MUEVE
+          - heading "NUESTRAS REGLAS DEL JUEGO" [level=2] [ref=f8e28]
+        - generic [ref=f8e29]:
+          - article [ref=f8e30]:
+            - generic [aria-hidden] [ref=f8e31]: ▶
+            - heading "JUGAR, SIN BARRERAS" [level=3] [ref=f8e32]
+            - paragraph [ref=f8e33]: Gratis, sin anuncios y sin instalar nada. Funciona en el ordenador y en el móvil.
+          - article [ref=f8e34]:
+            - generic [aria-hidden] [ref=f8e35]: ♥
+            - heading "RESPETO AL ORIGINAL" [level=3] [ref=f8e36]
+            - paragraph [ref=f8e37]: Cuidamos el ritmo, los controles y la estética de cada clásico. Nada de remakes que pierdan la esencia.
+          - article [ref=f8e38]:
+            - generic [aria-hidden] [ref=f8e39]: ★
+            - heading "COMPETIR LIMPIO" [level=3] [ref=f8e40]
+            - paragraph [ref=f8e41]: Un ranking global justo, donde cada récord se gana jugando y cada nombre en el Salón de la Fama cuenta.
+      - region "HECHO POR JUGADORES" [ref=f8e42]:
+        - generic [ref=f8e43]:
+          - generic [ref=f8e44]: 03 · EL EQUIPO
+          - heading "HECHO POR JUGADORES" [level=2] [ref=f8e45]
+        - paragraph [ref=f8e46]: "Somos un pequeño equipo de desarrolladores, diseñadores y coleccionistas con una misma obsesión: el récord que nunca conseguimos batir. Cada juego que entra en el vault lo probamos nosotros primero, partida tras partida."
+      - region "¿LISTO PARA EL SIGUIENTE NIVEL?" [ref=f8e47]:
+        - heading "¿LISTO PARA EL SIGUIENTE NIVEL?" [level=2] [ref=f8e48]: ¿LISTO PARA ELSIGUIENTE NIVEL?
+        - paragraph [ref=f8e49]: Crea tu cuenta gratis y deja tus iniciales en el marcador.
+        - generic [ref=f8e50]:
+          - link "CREAR CUENTA" [ref=f8e51] [cursor=pointer]:
+            - /url: /acceso?tab=registro
+          - link "CONTACTAR" [ref=f8e52] [cursor=pointer]:
+            - /url: "#contacto"
+      - region "ESCRÍBENOS" [ref=f8e53]:
+        - generic [ref=f8e54]:
+          - generic [ref=f8e55]: 04 · CONTACTO
+          - heading "ESCRÍBENOS" [level=2] [ref=f8e56]
+          - paragraph [ref=f8e57]: ¿Echas de menos un clásico, tienes una idea o has visto un fallo? Cuéntanoslo y te responderemos a tu correo.
+        - generic [ref=f8e58]:
+          - generic [ref=f8e59]:
+            - generic [ref=f8e60]: Nombre
+            - textbox "Nombre" [ref=f8e61]:
+              - /placeholder: Tu nombre o alias
+              - text: Pac Fan
+          - generic [ref=f8e62]:
+            - generic [ref=f8e63]: Correo electrónico
+            - textbox "Correo electrónico" [invalid] [ref=f8e64]:
+              - /placeholder: jugador@ejemplo.com
+              - text: no-es-un-correo
+            - paragraph [ref=f8e83]: Escribe un correo válido.
+          - generic [ref=f8e65]:
+            - generic [ref=f8e66]: Mensaje
+            - textbox "Mensaje" [invalid] [ref=f8e67]:
+              - /placeholder: Cuéntanos qué clásico echas de menos, una idea o un fallo que hayas visto.
+              - text: Hola
+            - paragraph [ref=f8e84]: El mensaje debe tener al menos 10 caracteres.
+          - generic [aria-hidden] [ref=f8e68]:
+            - text: No rellenes este campo
+            - textbox [ref=f8e69]
+          - paragraph [ref=f8e86]: Revisa los campos marcados.
+          - button "ENVIAR MENSAJE" [ref=f8e70] [cursor=pointer]
+      - paragraph [ref=f8e71]: GAME OVER? NUNCA. · ARCADE VAULT
+  - button "Open Next.js Dev Tools" [ref=f8e77] [cursor=pointer]
+  - alert [ref=f8e81]
