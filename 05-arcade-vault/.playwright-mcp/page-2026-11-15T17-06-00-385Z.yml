@@ -1,0 +1,59 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "ARCADE VAULT" [ref=e5] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e6]:
+          - link "Inicio" [ref=e7] [cursor=pointer]:
+            - /url: /
+          - link "Biblioteca" [ref=e8] [cursor=pointer]:
+            - /url: /biblioteca
+          - link "Salón de la Fama" [ref=e9] [cursor=pointer]:
+            - /url: /salon-de-la-fama
+        - link "Iniciar Sesión" [ref=e11] [cursor=pointer]:
+          - /url: /acceso
+    - main [ref=e12]:
+      - generic [ref=e13]:
+        - generic [ref=e14]: SOBRE NOSOTROS
+        - heading "SALVAMOS LAS RECREATIVAS DEL OLVIDO" [level=1] [ref=e15]: SALVAMOS LASRECREATIVAS DELOLVIDO
+        - paragraph [ref=e16]: "Arcade Vault nació de una idea sencilla: que cualquiera pueda volver a sentir la emoción de la sala recreativa sin moneda, sin descarga y sin esperar turno."
+      - region "DE LA SALA AL NAVEGADOR" [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]: 01 · NUESTRA HISTORIA
+          - heading "DE LA SALA AL NAVEGADOR" [level=2] [ref=e20]
+        - generic [ref=e21]:
+          - paragraph [ref=e22]: Crecimos entre el zumbido de las máquinas, el brillo de las pantallas CRT y las iniciales de tres letras en lo alto del marcador. Muchas de esas salas cerraron, pero los juegos no tenían por qué desaparecer con ellas.
+          - paragraph [ref=e23]: "Por eso construimos un vault: un lugar donde los clásicos se conservan, se juegan y se compiten como el primer día. Abres la página, eliges un cartucho y empiezas a jugar."
+      - region "NUESTRAS REGLAS DEL JUEGO" [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: 02 · LO QUE NOS MUEVE
+          - heading "NUESTRAS REGLAS DEL JUEGO" [level=2] [ref=e27]
+        - generic [ref=e28]:
+          - article [ref=e29]:
+            - generic [aria-hidden] [ref=e30]: ▶
+            - heading "JUGAR, SIN BARRERAS" [level=3] [ref=e31]
+            - paragraph [ref=e32]: Gratis, sin anuncios y sin instalar nada. Funciona en el ordenador y en el móvil.
+          - article [ref=e33]:
+            - generic [aria-hidden] [ref=e34]: ♥
+            - heading "RESPETO AL ORIGINAL" [level=3] [ref=e35]
+            - paragraph [ref=e36]: Cuidamos el ritmo, los controles y la estética de cada clásico. Nada de remakes que pierdan la esencia.
+          - article [ref=e37]:
+            - generic [aria-hidden] [ref=e38]: ★
+            - heading "COMPETIR LIMPIO" [level=3] [ref=e39]
+            - paragraph [ref=e40]: Un ranking global justo, donde cada récord se gana jugando y cada nombre en el Salón de la Fama cuenta.
+      - region "HECHO POR JUGADORES" [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]: 03 · EL EQUIPO
+          - heading "HECHO POR JUGADORES" [level=2] [ref=e44]
+        - paragraph [ref=e45]: "Somos un pequeño equipo de desarrolladores, diseñadores y coleccionistas con una misma obsesión: el récord que nunca conseguimos batir. Cada juego que entra en el vault lo probamos nosotros primero, partida tras partida."
+      - region "¿LISTO PARA EL SIGUIENTE NIVEL?" [ref=e46]:
+        - heading "¿LISTO PARA EL SIGUIENTE NIVEL?" [level=2] [ref=e47]: ¿LISTO PARA ELSIGUIENTE NIVEL?
+        - paragraph [ref=e48]: Crea tu cuenta gratis y deja tus iniciales en el marcador.
+        - generic [ref=e49]:
+          - link "CREAR CUENTA" [ref=e50] [cursor=pointer]:
+            - /url: /acceso?tab=registro
+          - link "CONTACTAR" [ref=e51] [cursor=pointer]:
+            - /url: "#contacto"
+      - paragraph [ref=e52]: GAME OVER? NUNCA. · ARCADE VAULT
+  - alert [ref=e53]

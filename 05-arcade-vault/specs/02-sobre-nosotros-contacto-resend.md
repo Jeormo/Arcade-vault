@@ -1,6 +1,6 @@
 # SPEC 02 — Página «Sobre nosotros» con formulario de contacto por Resend
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-11-15
 > **Objective:** Recrear en Next.js/React/Tailwind la página «Sobre nosotros» del prototipo `refereces/arcade-vault-retro-portal-Sobre-nosotros/project/Arcade Vault Sobre Nosotros.dc.html`, y añadir un formulario de contacto cuyo mensaje se envía por correo con Resend mediante una Server Action.
@@ -84,23 +84,23 @@ Antes del paso 1, leer en `node_modules/next/dist/docs/` las guías `server-acti
 
 ## Criterios de aceptación
 
-- [ ] `npm run lint` y `npm run build` terminan con código 0.
-- [ ] `/sobre-nosotros` carga sin errores en la consola ni avisos de hidratación, con la barra de navegación del portal.
-- [ ] La página contiene los textos literales del prototipo en las cinco secciones y la línea final «GAME OVER? NUNCA. · ARCADE VAULT».
-- [ ] «Sobre nosotros» aparece en la barra (escritorio) y en el menú lateral (< 1040 px; el corte sube desde 760 px porque cuatro enlaces no caben en una línea por debajo de ese ancho), y está marcada como activa en `/sobre-nosotros`.
-- [ ] «CREAR CUENTA» lleva a `/acceso?tab=registro` con la pestaña «Crear cuenta» abierta; `/acceso` sin parámetro sigue abriendo «Iniciar sesión».
-- [ ] «CONTACTAR» desplaza a `#contacto` y la barra sticky no tapa el título de la sección.
-- [ ] Enviar el formulario vacío muestra errores bajo los tres campos y no llama a Resend.
-- [ ] Un correo con formato inválido, un nombre de más de 80 caracteres o un mensaje de menos de 10 o más de 2000 caracteres muestran su error y conservan lo escrito.
-- [ ] Un envío válido con claves correctas llega a `CONTACT_TO_EMAIL`, con `reply-to` igual al correo del visitante, asunto `Contacto web · {nombre}` y cuerpo en texto plano.
-- [ ] Tras un envío correcto aparece «MENSAJE ENVIADO» y los campos quedan vacíos.
-- [ ] Mientras se envía, el botón muestra «ENVIANDO…» y no admite un segundo clic.
-- [ ] Con una `RESEND_API_KEY` inválida o sin alguna de las tres variables, el usuario ve el mensaje genérico de error, el detalle solo aparece en el log del servidor y los valores escritos se conservan.
-- [ ] Con el campo `website` relleno la acción devuelve éxito y no se envía ningún correo.
-- [ ] Un nombre con saltos de línea no inyecta cabeceras: el asunto llega en una sola línea.
-- [ ] `RESEND_API_KEY` no aparece en el bundle del cliente ni en ningún archivo versionado; `.env.example` sí está versionado y `.env.local` no.
-- [ ] `prefers-reduced-motion` desactiva el parpadeo del título, el de la línea final y el pulso de «CREAR CUENTA».
-- [ ] Ningún archivo importa o copia `refereces/`.
+- [x] `npm run lint` y `npm run build` terminan con código 0.
+- [x] `/sobre-nosotros` carga sin errores en la consola ni avisos de hidratación, con la barra de navegación del portal.
+- [x] La página contiene los textos literales del prototipo en las cinco secciones y la línea final «GAME OVER? NUNCA. · ARCADE VAULT».
+- [x] «Sobre nosotros» aparece en la barra (escritorio) y en el menú lateral (< 1040 px; el corte sube desde 760 px porque cuatro enlaces no caben en una línea por debajo de ese ancho), y está marcada como activa en `/sobre-nosotros`.
+- [x] «CREAR CUENTA» lleva a `/acceso?tab=registro` con la pestaña «Crear cuenta» abierta; `/acceso` sin parámetro sigue abriendo «Iniciar sesión».
+- [x] «CONTACTAR» desplaza a `#contacto` y la barra sticky no tapa el título de la sección.
+- [x] Enviar el formulario vacío muestra errores bajo los tres campos y no llama a Resend.
+- [x] Un correo con formato inválido, un nombre de más de 80 caracteres o un mensaje de menos de 10 o más de 2000 caracteres muestran su error y conservan lo escrito.
+- [x] Un envío válido con claves correctas llega a `CONTACT_TO_EMAIL`, con `reply-to` igual al correo del visitante, asunto `Contacto web · {nombre}` y cuerpo en texto plano.
+- [x] Tras un envío correcto aparece «MENSAJE ENVIADO» y los campos quedan vacíos.
+- [x] Mientras se envía, el botón muestra «ENVIANDO…» y no admite un segundo clic.
+- [x] Con una `RESEND_API_KEY` inválida o sin alguna de las tres variables, el usuario ve el mensaje genérico de error, el detalle solo aparece en el log del servidor y los valores escritos se conservan.
+- [x] Con el campo `website` relleno la acción devuelve éxito y no se envía ningún correo.
+- [x] Un nombre con saltos de línea no inyecta cabeceras: el asunto llega en una sola línea.
+- [x] `RESEND_API_KEY` no aparece en el bundle del cliente ni en ningún archivo versionado; `.env.example` sí está versionado y `.env.local` no.
+- [x] `prefers-reduced-motion` desactiva el parpadeo del título, el de la línea final y el pulso de «CREAR CUENTA».
+- [x] Ningún archivo importa o copia `refereces/`.
 
 ## Decisiones tomadas y descartadas
 
